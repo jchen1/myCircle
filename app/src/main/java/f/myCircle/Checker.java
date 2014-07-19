@@ -1,12 +1,10 @@
 package f.myCircle;
 
-import android.app.Service;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +24,6 @@ public class Checker implements Runnable {
 
     @Override
     public void run() {
-        Log.v("yo", "poop");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Cursor cur = db.query(UkEntryContract.UkEntry.TABLE_NAME, null, null, null, null, null, null, null);
         while(cur.moveToNext()) {
@@ -52,11 +49,8 @@ public class Checker implements Runnable {
                         System.out.println(e.getStackTrace());
                     }
                     curs.close();
-
-                    Log.v("deleted", cName);
                 }
-            }catch(Exception e){
-            }
+            }catch(Exception e){}
         }
         cur.close();
     }

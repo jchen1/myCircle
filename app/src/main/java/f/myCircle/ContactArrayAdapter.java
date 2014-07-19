@@ -48,7 +48,7 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
         ContactModel cm = getItem(position);
 
-        if (cm.getLastContacted().getTime() + cm.getTtk().getTime() > (new Date()).getTime()) {
+        if (cm.getLastContacted() != null && cm.getTtk() != null && cm.getLastContacted().getTime() + cm.getTtk().getTime() > (new Date()).getTime()) {
             remove(cm);
         }
 

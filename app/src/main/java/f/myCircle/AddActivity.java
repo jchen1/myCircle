@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -14,11 +13,6 @@ import com.fambam.myapplication.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import f.myCircle.AddFragment;
-import f.myCircle.ContactModel;
-import f.myCircle.UkDbHelper;
-import f.myCircle.UkEntryContract;
 
 public class AddActivity extends Activity {
 
@@ -72,10 +66,8 @@ public class AddActivity extends Activity {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date();
                     values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
-                    //long oneMonthMillis = 1000l * 60l * 60l * 24l * 30l;
-                    long oneMonthMillis = 1000l * 60l;
-                    Log.v("asdf", ""+oneMonthMillis);
-                    Date ttkDate = /*new Date(1000*60);//*/new Date(oneMonthMillis);
+                    long oneMonthMillis = 1000l * 60l * 60l * 24l * 30l;
+                    Date ttkDate = new Date(oneMonthMillis);
                     values.put(UkEntryContract.UkEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
 
                     long newRowId = db.insert(UkEntryContract.UkEntry.TABLE_NAME, "don't worry about this. no seriously.", values);

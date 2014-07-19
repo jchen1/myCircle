@@ -3,21 +3,16 @@ package f.myCircle;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.fambam.myapplication.R;
 
 import java.util.Date;
 import java.util.List;
-
-import f.myCircle.ContactModel;
 
 public class HomeArrayAdapter extends ArrayAdapter<ContactModel> {
 
@@ -62,6 +57,7 @@ public class HomeArrayAdapter extends ArrayAdapter<ContactModel> {
         }
 
         long diff = (new Date(list.get(position).getLastContacted().getTime() + list.get(position).getTtk().getTime())).getTime() - (new Date()).getTime();
+//        long diff = 0;
         holder.text2.setTextColor(Color.WHITE);
         holder.text1.setTextColor(Color.WHITE);
         if (diff < 0) {

@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.fambam.myapplication.R;
 
@@ -54,7 +51,6 @@ public class AddFragment extends ListFragment {
     public void onAttach(Activity activity) {
 
         super.onAttach(activity);
-        Log.v("MainActivity", "onAttach");
 
         mActivity = activity;
     }
@@ -66,8 +62,6 @@ public class AddFragment extends ListFragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Log.v("MainActivity", "You clicked item " + id + " at position " + position);
                 ContactModel cm = (ContactModel)parent.getAdapter().getItem(position);
                 if (cm.isSelected()) {
                     cm.setSelected(false);
@@ -79,11 +73,6 @@ public class AddFragment extends ListFragment {
 
             }
         });
-/*
-        parent.getChildAt(position).setBackgroundColor(Color.rgb(52, 152, 219));
-        ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.WHITE);
-        parent.getChildAt(position).setBackgroundColor(Color.WHITE);
-        ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.BLACK);*/
 
         UkDbHelper helper = new UkDbHelper(mActivity);
         db = helper.getWritableDatabase();
@@ -107,7 +96,6 @@ public class AddFragment extends ListFragment {
                 ContactsContract.PhoneLookup._ID};
 
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
-        Log.v("ukService", "uri=" + uri.toString());
 
         Cursor cursor = mActivity.getContentResolver().query(uri, projection, ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1", null, null);
 

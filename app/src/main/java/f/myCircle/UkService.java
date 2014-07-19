@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -23,7 +22,6 @@ public class UkService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //TODO do something useful
-        Log.v("ukService", "hello world");
 
         UkDbHelper helper = new UkDbHelper(this);
         db = helper.getWritableDatabase();
@@ -32,7 +30,7 @@ public class UkService extends Service {
                 PhoneStateListener.LISTEN_CALL_STATE);
         SMSListener smsListener = new SMSListener(db, this);
         scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(new Checker(db, this), 5, 5, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new Checker(db, this), 1, 1, TimeUnit.DAYS);
 
         return Service.START_NOT_STICKY;
     }

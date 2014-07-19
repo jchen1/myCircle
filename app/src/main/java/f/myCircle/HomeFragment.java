@@ -8,13 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 
 import com.fambam.myapplication.R;
@@ -42,8 +39,6 @@ public class HomeFragment extends ListFragment {
     public void onAttach(Activity activity) {
 
         super.onAttach(activity);
-        Log.v("MainActivity", "onAttach");
-
         mActivity = activity;
     }
 
@@ -81,7 +76,6 @@ public class HomeFragment extends ListFragment {
                 ContactsContract.PhoneLookup._ID};
 
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
-        Log.v("ukService", "uri=" + uri.toString());
 
         Cursor cursor = db.query(UkEntryContract.UkEntry.TABLE_NAME, null, null, null, null, null, null, null);
         while (cursor.moveToNext()) {
@@ -96,9 +90,7 @@ public class HomeFragment extends ListFragment {
                 lastContacted = sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT)));
                 ttk = sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_TTK)));
             } catch (Exception e) {}
-            if (lastContacted.getTime() + ttk.getTime() > (new Date()).getTime()) {
-                list.add(new ContactModel(firstName, lastName, ukid, contactId, lastContacted, ttk));
-            }
+            list.add(new ContactModel(firstName, lastName, ukid, contactId, lastContacted, ttk));
         }
 
         Collections.sort(list, new ContactModelTimeComparator());

@@ -10,7 +10,6 @@ import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -36,18 +35,14 @@ public class TeleListener extends PhoneStateListener {
         super.onCallStateChanged(state, incomingNumber);
         if (TelephonyManager.CALL_STATE_RINGING == state) {
             // phone ringing
-            Log.i("ukTeleListener", "RINGING, number: " + incomingNumber);
         }
         if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
             // using the incoming number, add to db
-            Log.i("ukTeleListener", "OFFHOOK");
             isPhoneCalling = true;
-
         }
         if (TelephonyManager.CALL_STATE_IDLE == state) {
             // run when class initial and phone call ended, need detect flag
             // from CALL_STATE_OFFHOOK
-            Log.i("ukTeleListener", "IDLE number");
 
             if (isPhoneCalling) {
 
@@ -60,7 +55,6 @@ public class TeleListener extends PhoneStateListener {
                     @Override
                     public void run() {
                         // get start of cursor
-                        Log.i("CallLogDetailsActivity", "Getting Log activity...");
                         String[] projection = new String[]{CallLog.Calls.NUMBER};
                         Cursor cur = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, null, null, CallLog.Calls.DATE +" desc");
                         cur.moveToFirst();
@@ -77,17 +71,12 @@ public class TeleListener extends PhoneStateListener {
                                 ContactsContract.PhoneLookup._ID};
 
                         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(lastCallnumber));
-                        Log.v("ukService", "uri=" + uri.toString());
 
                         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
 
                         if (cursor.moveToFirst()) {
                             contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID));
                             name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-
-                            Log.v("ukService", contactId);
-                            Log.v("ukService", name);
-
                         }
 
                         // db stuff
@@ -104,25 +93,6 @@ public class TeleListener extends PhoneStateListener {
                             values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
 
                             db.updateWithOnConflict(UkEntryContract.UkEntry.TABLE_NAME, values, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{contactId}, db.CONFLICT_REPLACE);
-                            Cursor asdf = db.query(UkEntryContract.UkEntry.TABLE_NAME, new String[]{UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID}, null, null, null, null, null, null);
-
-                            asdf.moveToFirst();
-                            while (asdf.moveToNext()) {
-                                Log.v("DB ENTRY TEST", "to=" + asdf.getString(0));
-                            }
-                            asdf.close();
-                        } else {
-                            // insert new
-                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID, contactId);
-                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_FIRSTNAME, name.split(" ")[0]);
-                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTNAME, name.split(" ")[1]);
-
-                            // set the format to sql date time
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            Date date = new Date();
-                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
-
-                            long newRowId = db.insert(UkEntryContract.UkEntry.TABLE_NAME, "foo", values);
                         }
 
                         cur.close();
