@@ -32,7 +32,7 @@ public class UkService extends Service {
                 PhoneStateListener.LISTEN_CALL_STATE);
         SMSListener smsListener = new SMSListener(db, this);
         scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(new Checker(db, this), 1, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new Checker(db, this), 1, 1, TimeUnit.DAYS);
 
         return Service.START_NOT_STICKY;
     }

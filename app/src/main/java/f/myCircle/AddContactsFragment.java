@@ -13,8 +13,6 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.fambam.myapplication.R;
 
-import f.myCircle.dummy.DummyContent;
-
 /**
  * A fragment representing a list of Items.
  * <p />

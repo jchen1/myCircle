@@ -14,18 +14,21 @@
         android:textAllCaps="true"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:textSize="25sp" >
     </TextView>
 
-    <!--<CheckBox-->
-        <!--android:id="@+id/check"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginLeft="4sp"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_marginRight="10sp" >-->
-    <!--</CheckBox>-->
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+id/text2"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="4sp"
+        android:layout_marginRight="10sp"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:textSize="15sp" >
+    </TextView>
 
 </RelativeLayout> 

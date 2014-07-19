@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -15,11 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fambam.myapplication.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -57,17 +60,30 @@ public class AddFragment extends ListFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.v("MainActivity", "onActivityCreated");
-
-        ListView lv = getListView();
+    public void onResume() {
+        super.onResume();
+        final ListView lv = getListView();
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Log.v("MainActivity", "You clicked item " + id + " at position " + position);
+                ContactModel cm = (ContactModel)parent.getAdapter().getItem(position);
+                if (cm.isSelected()) {
+                    cm.setSelected(false);
+                }
+                else {
+                    cm.setSelected(true);
+                }
+                lv.invalidateViews();
+
             }
         });
+/*
+        parent.getChildAt(position).setBackgroundColor(Color.rgb(52, 152, 219));
+        ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.WHITE);
+        parent.getChildAt(position).setBackgroundColor(Color.WHITE);
+        ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.BLACK);*/
 
         UkDbHelper helper = new UkDbHelper(mActivity);
         db = helper.getWritableDatabase();
@@ -75,10 +91,7 @@ public class AddFragment extends ListFragment {
         ArrayAdapter<ContactModel> adapter = new ContactArrayAdapter(mActivity, getModel());
 
         lv.setAdapter(adapter);
-/*
-            mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.fragment_add_item, null, FROM_COLUMNS, TO_IDS, 0);
-            lv.setAdapter(mAdapter);
-            getLoaderManager().initLoader(0, null, this);*/
+
     }
 
     private List<ContactModel> getModel() {
@@ -136,45 +149,10 @@ public class AddFragment extends ListFragment {
             }
         }
 
+        Collections.sort(list, new ContactModelNameComparator());
         return list;
     }
 
-        /*
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-            // load from the "Contacts table"
-            Uri contentUri = ContactsContract.Contacts.CONTENT_URI;
-            Log.v("MainActivity", "onCreateLoader");
-
-            // no sub-selection, no sort order, simply every row
-            // projection says we want just the _id and the name column
-            CursorLoader allContacts = new CursorLoader(getActivity(),
-                    contentUri,
-                    projection,
-                    ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",//null,
-                    null,
-                    null);
-
-
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            Log.v("MainActivity", "onLoadFinished");
-            Log.v("MainActivity", "" + data.getCount());
-
-            // Once cursor is loaded, give it to adapter
-            mAdapter.swapCursor(data);
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-            Log.v("MainActivity", "onLoaderReset");
-
-            // on reset take any old cursor away
-            mAdapter.swapCursor(null);
-        }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -183,54 +161,5 @@ public class AddFragment extends ListFragment {
         return rootView;
     }
 
-        /*
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            Context context = getActivity();
-            int layout = android.R.layout.simple_list_item_1;
-            Cursor c = null; // there is no cursor yet
-            int flags = 0; // no auto-requery! Loader requeries.
-            mAdapter = new SimpleCursorAdapter(context, layout, c, FROM, TO, flags);
-        }
-
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-            mContactsList = (ListView) getActivity().findViewById(R.layout.fragment_add);
-            mCursorAdapter = new SimpleCursorAdapter(
-                    getActivity(),
-                    R.layout.contact_list_item,
-                    null,
-                    FROM_COLUMNS, TO_IDS,
-                    0);
-            mContactList.setAdapter(mCursorAdapter);
-        }
-
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            mActivity = getActivity();
-            UkDbHelper helper = new UkDbHelper(mActivity);
-            db = helper.getWritableDatabase();
-
-            // each time we are started use our listadapter
-            setListAdapter(mAdapter);
-            // and tell loader manager to start loading
-            getLoaderManager().initLoader(0, null, this);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_addcontacts_list, container, false);
-            return rootView;
-        }
-
-        // and name should be displayed in the text1 textview in item layout
-        private static final String[] FROM = { ContactsContract.Contacts.DISPLAY_NAME_PRIMARY };
-        private static final int[] TO = { android.R.id.text1 };
-        // columns requested from the database
-        private static final String[] PROJECTION = {
-                ContactsContract.Contacts._ID, // _ID is always required
-                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY // that's what we want to display
-        }; */
 
 }

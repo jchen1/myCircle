@@ -1,12 +1,12 @@
 package f.myCircle;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.fambam.myapplication.R;
@@ -40,28 +40,24 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
             view = inflator.inflate(R.layout.fragment_add_item, null);
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = (TextView) view.findViewById(R.id.text1);
-            viewHolder.checkbox = (CheckBox) view.findViewById(R.id.check);
-            viewHolder.checkbox
-                    .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView,
-                                                     boolean isChecked) {
-                            ContactModel element = (ContactModel) viewHolder.checkbox
-                                    .getTag();
-                            element.setSelected(buttonView.isChecked());
-
-                        }
-                    });
             view.setTag(viewHolder);
-            viewHolder.checkbox.setTag(list.get(position));
         } else {
             view = convertView;
-            ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
         }
+
+        ContactModel cm = getItem(position);
+
+        if (cm.isSelected()) {
+            view.setBackgroundColor(Color.rgb(52, 152, 219));
+            ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.WHITE);
+        }
+        else {
+            view.setBackgroundColor(Color.WHITE);
+            ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.BLACK);
+        }
+
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.text.setText(list.get(position).getFirstName() + " " + list.get(position).getLastName());
-        holder.checkbox.setChecked(list.get(position).isSelected());
         return view;
     }
 }

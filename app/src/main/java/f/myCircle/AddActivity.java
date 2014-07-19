@@ -1,4 +1,4 @@
-package f.myCircle.dummy;
+package f.myCircle;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -50,7 +50,6 @@ public class AddActivity extends Activity {
     }
 
     private void confirm() {
-        Log.v("confirm", addFragment == null ? "asdf" : "wefe");
         SQLiteDatabase db;
         UkDbHelper helper = new UkDbHelper(this);
         db = helper.getWritableDatabase();
@@ -73,8 +72,10 @@ public class AddActivity extends Activity {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date();
                     values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
-
-                    Date ttkDate = new Date(1000*60);//new Date(1000*60*60*24*30);
+                    //long oneMonthMillis = 1000l * 60l * 60l * 24l * 30l;
+                    long oneMonthMillis = 1000l * 60l;
+                    Log.v("asdf", ""+oneMonthMillis);
+                    Date ttkDate = /*new Date(1000*60);//*/new Date(oneMonthMillis);
                     values.put(UkEntryContract.UkEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
 
                     long newRowId = db.insert(UkEntryContract.UkEntry.TABLE_NAME, "don't worry about this. no seriously.", values);

@@ -92,19 +92,39 @@ public class TeleListener extends PhoneStateListener {
 
                         // db stuff
 
+                        Cursor curs = db.query(UkEntryContract.UkEntry.TABLE_NAME, new String[]{UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{contactId}, null, null, null, null);
                         ContentValues values = new ContentValues();
-                        values.put(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID, contactId);
-                        values.put(UkEntryContract.UkEntry.COLUMN_NAME_FIRSTNAME, name.split(" ")[0]);
-                        values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTNAME, name.split(" ")[1]);
 
-                        // set the format to sql date time
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date date = new Date();
-                        values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
+                        if (curs.getCount() != 0) {
+                            //update field
+//
+                            // set the format to sql date time
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Date date = new Date();
+                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
 
-                        long newRowId = db.insert(UkEntryContract.UkEntry.TABLE_NAME, "foo", values);
+                            db.updateWithOnConflict(UkEntryContract.UkEntry.TABLE_NAME, values, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{contactId}, db.CONFLICT_REPLACE);
+                            Cursor asdf = db.query(UkEntryContract.UkEntry.TABLE_NAME, new String[]{UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID}, null, null, null, null, null, null);
 
-                        cursor.close();
+                            asdf.moveToFirst();
+                            while (asdf.moveToNext()) {
+                                Log.v("DB ENTRY TEST", "to=" + asdf.getString(0));
+                            }
+                            asdf.close();
+                        } else {
+                            // insert new
+                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID, contactId);
+                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_FIRSTNAME, name.split(" ")[0]);
+                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTNAME, name.split(" ")[1]);
+
+                            // set the format to sql date time
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Date date = new Date();
+                            values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
+
+                            long newRowId = db.insert(UkEntryContract.UkEntry.TABLE_NAME, "foo", values);
+                        }
+
                         cur.close();
 
                     }
