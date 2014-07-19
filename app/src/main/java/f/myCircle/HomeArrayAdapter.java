@@ -51,30 +51,60 @@ public class HomeArrayAdapter extends ArrayAdapter<ContactModel> {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.text1.setText(list.get(position).getFirstName() + " " + list.get(position).getLastName());
 
+        ContactModel cm = getItem(position);
+
+        if (cm.isSelected()) {
+            ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.WHITE);
+        }
+        else {
+            view.setBackgroundColor(Color.WHITE);
+            ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.BLACK);
+        }
+
         long diff = (new Date(list.get(position).getLastContacted().getTime() + list.get(position).getTtk().getTime())).getTime() - (new Date()).getTime();
+        holder.text2.setTextColor(Color.WHITE);
+        holder.text1.setTextColor(Color.WHITE);
+        if (diff < 0) {
+            remove(cm);
+        }
         if (diff < 1000l*60) {
-            holder.text2.setText("" + Math.round(diff / (1000.0)) + " seconds");
-            holder.text2.setTextColor(Color.RED);
+            if (diff < 1000l * 30) {
+                if (Math.round(diff / 1000.0) == 1) {
+                    holder.text2.setText("1 second");
+                }
+                else {
+                    holder.text2.setText("" + Math.round(diff / (1000.0)) + " seconds");
+                }
+                view.setBackgroundColor(Color.rgb(192, 57, 43));
+            }
+            else if (diff < 1000l * 45) {
+                holder.text2.setText("" + Math.round(diff / (1000.0)) + " seconds");
+                view.setBackgroundColor(Color.rgb(241, 196, 15));
+            }
+            else {
+                holder.text2.setText("" + Math.round(diff / (1000.0)) + " seconds");
+                view.setBackgroundColor(Color.rgb(46, 204, 113));
+            }
         }
         else if (diff < 1000l*60*60) {
             holder.text2.setText("" + Math.round(diff / (1000.0 * 60)) + " minutes");
-            holder.text2.setTextColor(Color.RED);
+            view.setBackgroundColor(Color.rgb(192, 57, 43));
         }
         else if (diff < 1000l*60*60*24) {
             holder.text2.setText("" + Math.round(diff / (1000.0 * 60 * 60)) + " hours");
-            holder.text2.setTextColor(Color.RED);
+            view.setBackgroundColor(Color.rgb(192, 57, 43));
         }
         else if (diff < 1000l*60*60*24*30) {
             holder.text2.setText("" + Math.round(diff / (1000.0 * 60 * 60 * 24)) + " days");
-            holder.text2.setTextColor(Color.rgb(241, 196, 15));
+            view.setBackgroundColor(Color.rgb(241, 196, 15));
         }
         else if (diff < 1000l*60*60*24*30*12) {
             holder.text2.setText("" + Math.round(diff / (1000.0 * 60 * 60 * 24 * 30)) + " months");
-            holder.text2.setTextColor(Color.GREEN);
+            view.setBackgroundColor(Color.rgb(46, 204, 113));
         }
         else {
             holder.text2.setText("" + Math.round(diff / (1000.0 * 60 * 60 * 24 * 30 * 12.5)) + " years");
-            holder.text2.setTextColor(Color.GREEN);
+            view.setBackgroundColor(Color.rgb(46, 204, 113));
         }
         return view;
     }

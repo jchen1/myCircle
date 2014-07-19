@@ -33,7 +33,8 @@ public class Checker implements Runnable {
             try {
                 Date lastContact = sdf.parse(cur.getString(cur.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT)));
                 Date timeToKill = sdf.parse(cur.getString(cur.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_TTK)));
-                if ((new Date()).getTime() < lastContact.getTime()+timeToKill.getTime()){
+
+                if ((new Date()).getTime() > lastContact.getTime()+timeToKill.getTime()){
                     String eid = cur.getString(cur.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID));
                     String cName = cur.getString(cur.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_FIRSTNAME));
                     db.delete(UkEntryContract.UkEntry.TABLE_NAME, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{eid});
@@ -53,7 +54,6 @@ public class Checker implements Runnable {
                     curs.close();
 
                     Log.v("deleted", cName);
-
                 }
             }catch(Exception e){
             }

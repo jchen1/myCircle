@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.fambam.myapplication.R;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +47,10 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
         }
 
         ContactModel cm = getItem(position);
+
+        if (cm.getLastContacted().getTime() + cm.getTtk().getTime() > (new Date()).getTime()) {
+            remove(cm);
+        }
 
         if (cm.isSelected()) {
             view.setBackgroundColor(Color.rgb(52, 152, 219));

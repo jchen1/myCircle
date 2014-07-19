@@ -51,12 +51,6 @@ public class HomeFragment extends ListFragment {
         super.onResume();
 
         final ListView lv = getListView();
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("MainActivity", "You clicked item " + id + " at position " + position);
-            }
-        });
 
         UkDbHelper helper = new UkDbHelper(mActivity);
         db = helper.getWritableDatabase();
@@ -102,8 +96,9 @@ public class HomeFragment extends ListFragment {
                 lastContacted = sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT)));
                 ttk = sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_TTK)));
             } catch (Exception e) {}
-
-            list.add(new ContactModel(firstName, lastName, ukid, contactId, lastContacted, ttk));
+            if (lastContacted.getTime() + ttk.getTime() > (new Date()).getTime()) {
+                list.add(new ContactModel(firstName, lastName, ukid, contactId, lastContacted, ttk));
+            }
         }
 
         Collections.sort(list, new ContactModelTimeComparator());
