@@ -22,6 +22,10 @@ public class ContactModel {
         this.isSelected = isSelected;
     }
 
+    public ContactModel() {
+        this.isSelected = false;
+    }
+
     public ContactModel(String name, int contactId) {
         this.name = name;
 

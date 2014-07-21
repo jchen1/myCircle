@@ -1,16 +1,11 @@
 package f.myCircle;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.ContactsContract;
-
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by jeff on 7/19/14.
@@ -19,7 +14,7 @@ public class SMSListener {
 
     private ContentObserver observer;
     private Context context;
-    private SQLiteDatabase db;
+    private DatabaseManager db;
 
     public static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     public static final String ACTION_NEW_OUTGOING_SMS = "android.provider.Telephony.NEW_OUTGOING_SMS";
@@ -36,8 +31,8 @@ public class SMSListener {
 
     public SMSListener(SQLiteDatabase _db, Context _context) {
         super();
-        db = _db;
         context = _context;
+        db = new DatabaseManager(_db, context);
         registerContentObserver();
     }
 
@@ -48,8 +43,7 @@ public class SMSListener {
     private void registerContentObserver() {
         observer = new ContentObserver(null) {
             public void onChange(boolean selfChange) {
-                Cursor cursor = context.getContentResolver().query(
-                        Uri.parse(CONTENT_SMS), null, null, null, null);
+                Cursor cursor = context.getContentResolver().query(Uri.parse(CONTENT_SMS), null, null, null, null);
                 if (cursor.moveToNext()) {
                     String protocol = cursor.getString(cursor.getColumnIndex("protocol"));
                     int type = cursor.getInt(cursor.getColumnIndex("type"));
@@ -58,55 +52,19 @@ public class SMSListener {
                     if (protocol != null || type != MESSAGE_TYPE_SENT) {
                         return;
                     }
-                    int dateColumn = cursor.getColumnIndex("date");
-                    int bodyColumn = cursor.getColumnIndex("body");
-                    int addressColumn = cursor.getColumnIndex("address");
+                    String lastCallNumber = cursor.getString(cursor.getColumnIndex("address"));
+                    Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(lastCallNumber));
 
-                    String from = "0";
-                    String lastCallnumber = cursor.getString(addressColumn);
-                    Date now = new Date(cursor.getLong(dateColumn));
-                    String message = cursor.getString(bodyColumn);
-
-                    String name = null;
-                    String contactId = null;
-                    InputStream input = null;
-
-                    // define the columns I want the query to return
-                    String[] projection = new String[]{
-                            ContactsContract.PhoneLookup.DISPLAY_NAME,
-                            ContactsContract.PhoneLookup._ID};
-
-                    Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(lastCallnumber));
-
-                    Cursor cur = context.getContentResolver().query(uri, projection, null, null, null);
+                    Cursor cur = context.getContentResolver().query(uri, new String[]{ContactsContract.Contacts._ID}, null, null, null);
 
                     if (cur.moveToFirst()) {
-                        contactId = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup._ID));
-                        name = cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+                        ContactModel contact = new ContactModel();
+                        contact.setContactId(Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup._ID))));
+                        db.touchContact(contact);
                     }
                     cur.close();
-
-                    // db stuff
-
-                    Cursor curs = db.query(UkEntryContract.UkEntry.TABLE_NAME, new String[]{UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{contactId}, null, null, null, null);
-                    ContentValues values = new ContentValues();
-
-                    if (curs.getCount() != 0) {
-                        //update field
-//
-                        // set the format to sql date time
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date date = new Date();
-                        values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(date));
-
-                        db.updateWithOnConflict(UkEntryContract.UkEntry.TABLE_NAME, values, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{contactId}, db.CONFLICT_REPLACE);
-                    }
-                    curs.close();
-
                 }
                 cursor.close();
-
-                return;
             }
         };
         context.getContentResolver().registerContentObserver(
