@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.fambam.myapplication.R;
+import com.f.myCircle.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,15 +82,14 @@ public class HomeFragment extends ListFragment {
             int contactId = Integer.parseInt(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID)));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Date lastContacted = null, ttk = null;
-            String firstName = cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_FIRSTNAME));
-            String lastName  = cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_LASTNAME));
+            String name = cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_NAME));
 
             int ukid = Integer.parseInt(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry._ID)));
             try {
                 lastContacted = sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT)));
                 ttk = sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_TTK)));
             } catch (Exception e) {}
-            list.add(new ContactModel(firstName, lastName, ukid, contactId, lastContacted, ttk));
+            list.add(new ContactModel(name, ukid, contactId, lastContacted, ttk));
         }
 
         Collections.sort(list, new ContactModelTimeComparator());

@@ -2,8 +2,6 @@ package f.myCircle;
 
 import java.util.Comparator;
 
-import f.myCircle.ContactModel;
-
 /**
  * Created by jeff on 7/19/14.
  */

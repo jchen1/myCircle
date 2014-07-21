@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.fambam.myapplication.R;
+import com.f.myCircle.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,8 +58,7 @@ public class AddActivity extends Activity {
 
                     // insert new
                     values.put(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID, cm.getContactId());
-                    values.put(UkEntryContract.UkEntry.COLUMN_NAME_FIRSTNAME, cm.getFirstName());
-                    values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTNAME, cm.getLastName());
+                    values.put(UkEntryContract.UkEntry.COLUMN_NAME_NAME, cm.getName());
 
 
                     // set the format to sql date time
@@ -71,7 +70,6 @@ public class AddActivity extends Activity {
                     values.put(UkEntryContract.UkEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
 
                     long newRowId = db.insert(UkEntryContract.UkEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
-
                 }
                 curs.close();
 

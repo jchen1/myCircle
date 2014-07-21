@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 
-import com.fambam.myapplication.R;
+import com.f.myCircle.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -101,9 +101,8 @@ public class AddFragment extends ListFragment {
 
         while (cursor.moveToNext()) {
             String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID));
-            String[] nameSplit = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)).split(" ");
-            String firstName = nameSplit[0], lastName = nameSplit.length > 1 ? nameSplit[1] : "";
-            ContactModel item = new ContactModel(firstName, lastName, Integer.parseInt(contactId));
+            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+            ContactModel item = new ContactModel(name, Integer.parseInt(contactId));
             item.setSelected(false);
             list.add(item);
         }

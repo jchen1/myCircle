@@ -6,8 +6,7 @@ import java.util.Date;
  * Created by jeff on 7/19/14.
  */
 public class ContactModel {
-    private String firstName;
-    private String lastName;
+    private String name;
     private int ukId;   // -1 = not part of db
     private int contactId;
     private Date lastContacted;
@@ -23,15 +22,15 @@ public class ContactModel {
         this.isSelected = isSelected;
     }
 
-    public ContactModel(String firstName, String lastName, int contactId) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public ContactModel(String name, int contactId) {
+        this.name = name;
+
         this.contactId = contactId;
+        this.isSelected = false;
     }
 
-    public ContactModel(String firstName, String lastName, int ukId, int contactId, Date lastContacted, Date ttk) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public ContactModel(String name, int ukId, int contactId, Date lastContacted, Date ttk) {
+        this.name = name;
 
         this.ukId = ukId;
         this.contactId = contactId;
@@ -41,20 +40,12 @@ public class ContactModel {
         this.isSelected = (ukId != -1);
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getUkId() {

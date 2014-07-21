@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.fambam.myapplication.R;
+import com.f.myCircle.R;
 
 import java.util.Date;
 import java.util.List;
@@ -29,8 +28,7 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
     }
 
     static class ViewHolder {
-        protected TextView text;
-        protected CheckBox checkbox;
+        protected TextView name;
     }
 
     @Override
@@ -40,7 +38,7 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
             LayoutInflater inflator = context.getLayoutInflater();
             view = inflator.inflate(R.layout.fragment_add_item, null);
             final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.text = (TextView) view.findViewById(R.id.text1);
+            viewHolder.name = (TextView) view.findViewById(R.id.name);
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -48,21 +46,21 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
         ContactModel cm = getItem(position);
 
-        if (cm.getLastContacted() != null && cm.getTtk() != null && cm.getLastContacted().getTime() + cm.getTtk().getTime() > (new Date()).getTime()) {
+        if (cm.getLastContacted() != null && cm.getTtk() != null && cm.getLastContacted().getTime() + cm.getTtk().getTime() < (new Date()).getTime()) {
             remove(cm);
         }
 
         if (cm.isSelected()) {
             view.setBackgroundColor(Color.rgb(52, 152, 219));
-            ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.WHITE);
+            ((TextView) view.findViewById(R.id.name)).setTextColor(Color.WHITE);
         }
         else {
             view.setBackgroundColor(Color.WHITE);
-            ((TextView) view.findViewById(R.id.text1)).setTextColor(Color.BLACK);
+            ((TextView) view.findViewById(R.id.name)).setTextColor(Color.BLACK);
         }
 
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.text.setText(list.get(position).getFirstName() + " " + list.get(position).getLastName());
+        holder.name.setText(list.get(position).getName());
         return view;
     }
 }

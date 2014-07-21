@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
 /**
  * Created by jeff on 7/18/14.
  */
@@ -21,8 +20,7 @@ public class UkDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + UkEntryContract.UkEntry.TABLE_NAME + " (" +
                     UkEntryContract.UkEntry._ID + " INTEGER PRIMARY KEY," +
                     UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + INT_TYPE + COMMA_SEP +
-                    UkEntryContract.UkEntry.COLUMN_NAME_FIRSTNAME + TEXT_TYPE + COMMA_SEP +
-                    UkEntryContract.UkEntry.COLUMN_NAME_LASTNAME + TEXT_TYPE + COMMA_SEP +
+                    UkEntryContract.UkEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT + DATE_TYPE + COMMA_SEP +
                     UkEntryContract.UkEntry.COLUMN_NAME_TTK + DATE_TYPE +
             " )";

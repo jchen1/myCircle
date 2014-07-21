@@ -21,7 +21,6 @@ public class UkService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //TODO do something useful
 
         UkDbHelper helper = new UkDbHelper(this);
         db = helper.getWritableDatabase();

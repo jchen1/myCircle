@@ -6,13 +6,9 @@ package f.myCircle;
 
 import java.util.Comparator;
 
-
 public class ContactModelNameComparator implements Comparator<ContactModel> {
     @Override
     public int compare(ContactModel lhs, ContactModel rhs) {
-        String lhsName = (lhs.getFirstName() + " " + lhs.getLastName()).toLowerCase();
-        String rhsName = (rhs.getFirstName() + " " + rhs.getLastName()).toLowerCase();
-
-        return lhsName.compareTo(rhsName);
+        return lhs.getName().compareTo(rhs.getName());
     }
 }
