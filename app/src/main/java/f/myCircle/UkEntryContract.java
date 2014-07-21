@@ -11,7 +11,7 @@ public final class UkEntryContract {
     public UkEntryContract() {}
 
     /* Inner class that defines the table contents */
-    public static abstract class UkEntry implements BaseColumns {
+    public static abstract class ContactEntry implements BaseColumns {
         public static final String TABLE_NAME = "UkContacts";
         public static final String COLUMN_NAME_ENTRY_ID = "contactid";
         public static final String COLUMN_NAME_NAME = "name";

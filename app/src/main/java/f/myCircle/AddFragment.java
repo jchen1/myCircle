@@ -18,11 +18,8 @@ import java.util.List;
  * Created by jeff on 7/19/14.
  */
 public class AddFragment extends ListFragment {
-    DatabaseManager db;
-    Activity mActivity;
-
-    public AddFragment() {
-    }
+    private DatabaseManager db;
+    private Activity mActivity;
 
     @Override
     public void onAttach(Activity activity) {
@@ -45,8 +42,7 @@ public class AddFragment extends ListFragment {
             }
         });
 
-        UkDbHelper helper = new UkDbHelper(mActivity);
-        db = new DatabaseManager(helper.getWritableDatabase(), mActivity);
+        db = new DatabaseManager(mActivity);
 
         lv.setAdapter(new ContactArrayAdapter(mActivity, getModel()));
 

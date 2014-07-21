@@ -38,8 +38,7 @@ public class AddActivity extends Activity {
     }
 
     private void confirm() {
-        UkDbHelper helper = new UkDbHelper(this);
-        DatabaseManager db = new DatabaseManager(helper.getWritableDatabase(), this);
+        DatabaseManager db = new DatabaseManager(this);
         ArrayAdapter<ContactModel> adapter = (ArrayAdapter<ContactModel>)addFragment.getListView().getAdapter();
         for (int i = 0; i < adapter.getCount(); i++) {
             ContactModel cm = adapter.getItem(i);

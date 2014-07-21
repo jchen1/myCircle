@@ -35,8 +35,7 @@ public class HomeFragment extends ListFragment {
 
         final ListView lv = getListView();
 
-        UkDbHelper helper = new UkDbHelper(mActivity);
-        db = new DatabaseManager(helper.getWritableDatabase(), mActivity);
+        db = new DatabaseManager(mActivity);
 
         ArrayAdapter<ContactModel> adapter = new HomeArrayAdapter(mActivity, getModel());
 

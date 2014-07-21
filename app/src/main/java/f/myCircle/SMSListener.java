@@ -16,9 +16,6 @@ public class SMSListener {
     private Context context;
     private DatabaseManager db;
 
-    public static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    public static final String ACTION_NEW_OUTGOING_SMS = "android.provider.Telephony.NEW_OUTGOING_SMS";
-
     private static final String CONTENT_SMS = "content://sms";
 
     /**
@@ -26,13 +23,10 @@ public class SMSListener {
      */
     private static final int MESSAGE_TYPE_SENT = 2;
 
-    private static final String[] INTENTS = {ACTION_SMS_RECEIVED, ACTION_NEW_OUTGOING_SMS};
-
-
-    public SMSListener(SQLiteDatabase _db, Context _context) {
+    public SMSListener(Context _context) {
         super();
         context = _context;
-        db = new DatabaseManager(_db, context);
+        db = new DatabaseManager(context);
         registerContentObserver();
     }
 

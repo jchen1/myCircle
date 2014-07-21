@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -17,14 +18,47 @@ import java.util.Locale;
 /**
  * Created by jeff on 7/18/14.
  */
-public class DatabaseManager {
-
+public class DatabaseManager extends SQLiteOpenHelper {
     SQLiteDatabase db;
     Context ctx;
 
-    public DatabaseManager(SQLiteDatabase _db, Context ctx) {
-        db = _db;
+    public DatabaseManager(Context ctx) {
+        super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
+        db = super.getWritableDatabase();
         this.ctx = ctx;
+    }
+
+    // If you change the database schema, you must increment the database version.
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "Uk.db";
+    private static final String TEXT_TYPE = " TEXT";
+    private static final String INT_TYPE = " INTEGER";
+    private static final String DATE_TYPE = " DATE";
+    private static final String COMMA_SEP = ",";
+    private static final String SQL_CREATE_ENTRIES =
+
+            "CREATE TABLE " + UkEntryContract.ContactEntry.TABLE_NAME + " (" +
+                    UkEntryContract.ContactEntry._ID + " INTEGER PRIMARY KEY," +
+                    UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + INT_TYPE + COMMA_SEP +
+                    UkEntryContract.ContactEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                    UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT + DATE_TYPE + COMMA_SEP +
+                    UkEntryContract.ContactEntry.COLUMN_NAME_TTK + DATE_TYPE +
+                    " )";
+    private static final String SQL_DELETE_ENTRIES =
+            "DROP TABLE IF EXISTS " + UkEntryContract.ContactEntry.TABLE_NAME;
+
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_ENTRIES);
+    }
+
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // This database is only a cache for online data, so its upgrade policy is
+        // to simply to discard the data and start over
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
+    }
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 
     public List<ContactModel> getAllContacts() {
@@ -41,9 +75,9 @@ public class DatabaseManager {
             String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID));
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
             ContactModel item = new ContactModel(name, Integer.parseInt(contactId));
-            Cursor selectedCursor = db.query(UkEntryContract.UkEntry.TABLE_NAME,
-                                            new String[]{UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID},
-                                            UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=" + contactId,
+            Cursor selectedCursor = db.query(UkEntryContract.ContactEntry.TABLE_NAME,
+                                            new String[]{UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID},
+                                            UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=" + contactId,
                                             null, null, null, null);
             item.setSelected(selectedCursor.getCount() > 0);
             selectedCursor.close();
@@ -55,17 +89,17 @@ public class DatabaseManager {
     }
 
     public List<ContactModel> getAddedContacts() {
-        Cursor cursor = db.query(UkEntryContract.UkEntry.TABLE_NAME, null, null, null, null, null, null, null);
+        Cursor cursor = db.query(UkEntryContract.ContactEntry.TABLE_NAME, null, null, null, null, null, null, null);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         List<ContactModel> addedContacts = new ArrayList<ContactModel>();
         while (cursor.moveToNext()) {
             ContactModel contact = new ContactModel();
-            contact.setName(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_NAME)));
-            contact.setUkId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry._ID))));
-            contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID))));
+            contact.setName(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_NAME)));
+            contact.setUkId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry._ID))));
+            contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID))));
             try {
-                contact.setLastContacted(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT))));
-                contact.setTtk(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.UkEntry.COLUMN_NAME_TTK))));
+                contact.setLastContacted(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT))));
+                contact.setTtk(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_TTK))));
             } catch (Exception e) {}
             addedContacts.add(contact);
         }
@@ -80,20 +114,20 @@ public class DatabaseManager {
         Log.v("DatabaseManager", "addContact touchContact id="+contact.getContactId());
 
         long ret = 0;
-        Cursor curs = db.query(UkEntryContract.UkEntry.TABLE_NAME, new String[]{UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{"" + contact.getContactId()}, null, null, null, null);
+        Cursor curs = db.query(UkEntryContract.ContactEntry.TABLE_NAME, new String[]{UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{"" + contact.getContactId()}, null, null, null, null);
         ContentValues values = new ContentValues();
         if (curs.getCount() == 0) {
 
-            values.put(UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID, contact.getContactId());
-            values.put(UkEntryContract.UkEntry.COLUMN_NAME_NAME, contact.getName());
+            values.put(UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID, contact.getContactId());
+            values.put(UkEntryContract.ContactEntry.COLUMN_NAME_NAME, contact.getName());
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
+            values.put(UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
             long oneMonthMillis = 1000l * 60l * 60l * 24l * 30l;
             Date ttkDate = new Date(oneMonthMillis);
-            values.put(UkEntryContract.UkEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
+            values.put(UkEntryContract.ContactEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
 
-            ret = db.insert(UkEntryContract.UkEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
+            ret = db.insert(UkEntryContract.ContactEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
         }
         curs.close();
         return ret;
@@ -102,7 +136,7 @@ public class DatabaseManager {
     public boolean touchContact(ContactModel contact) {
         Log.v("DatabaseManager", "touchContact id="+contact.getContactId());
         long ret = 0;
-        Cursor curs = db.query(UkEntryContract.UkEntry.TABLE_NAME, new String[]{UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, null, null, null, null);
+        Cursor curs = db.query(UkEntryContract.ContactEntry.TABLE_NAME, new String[]{UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, null, null, null, null);
         ContentValues values = new ContentValues();
 
         if (curs.getCount() != 0) {
@@ -110,9 +144,9 @@ public class DatabaseManager {
 
             // set the format to sql date time
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            values.put(UkEntryContract.UkEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
+            values.put(UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
 
-            ret = db.updateWithOnConflict(UkEntryContract.UkEntry.TABLE_NAME, values, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, db.CONFLICT_REPLACE);
+            ret = db.updateWithOnConflict(UkEntryContract.ContactEntry.TABLE_NAME, values, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, db.CONFLICT_REPLACE);
         }
         curs.close();
         Log.v("DatabaseManager", "changed="+ret);
@@ -122,7 +156,7 @@ public class DatabaseManager {
 
     /* removeContact() removes from our db; deleteContact() deletes entirely. The ContactModel should have its Android database id.  */
     public int removeContact(ContactModel contact) {
-        return db.delete(UkEntryContract.UkEntry.TABLE_NAME, UkEntryContract.UkEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()});
+        return db.delete(UkEntryContract.ContactEntry.TABLE_NAME, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()});
     }
 
     public int deleteContact(ContactModel contact) {

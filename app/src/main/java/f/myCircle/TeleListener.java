@@ -19,10 +19,10 @@ public class TeleListener extends PhoneStateListener {
     private Context context;
     private boolean isPhoneCalling;
 
-    public TeleListener(SQLiteDatabase _db, Context _context) {
+    public TeleListener(Context _context) {
         super();
         context = _context;
-        db = new DatabaseManager(_db, context);
+        db = new DatabaseManager(context);
         isPhoneCalling = false;
     }
 
