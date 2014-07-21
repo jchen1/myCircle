@@ -100,7 +100,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
             try {
                 contact.setLastContacted(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT))));
                 contact.setTtk(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_TTK))));
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                cursor.close();
+            }
             addedContacts.add(contact);
         }
 
@@ -115,9 +117,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
         long ret = 0;
         Cursor curs = db.query(UkEntryContract.ContactEntry.TABLE_NAME, new String[]{UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{"" + contact.getContactId()}, null, null, null, null);
-        ContentValues values = new ContentValues();
         if (curs.getCount() == 0) {
-
+            ContentValues values = new ContentValues();
             values.put(UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID, contact.getContactId());
             values.put(UkEntryContract.ContactEntry.COLUMN_NAME_NAME, contact.getName());
 
@@ -134,13 +135,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public boolean touchContact(ContactModel contact) {
-        Log.v("DatabaseManager", "touchContact id="+contact.getContactId());
         long ret = 0;
         Cursor curs = db.query(UkEntryContract.ContactEntry.TABLE_NAME, new String[]{UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, null, null, null, null);
         ContentValues values = new ContentValues();
 
         if (curs.getCount() != 0) {
-            Log.v("DatabaseManager", "touchContact id="+contact.getContactId());
 
             // set the format to sql date time
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -149,7 +148,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
             ret = db.updateWithOnConflict(UkEntryContract.ContactEntry.TABLE_NAME, values, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, db.CONFLICT_REPLACE);
         }
         curs.close();
-        Log.v("DatabaseManager", "changed="+ret);
 
         return (ret > 0);
     }
@@ -174,7 +172,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
             ret = ctx.getContentResolver().delete(uri, null, null);
 
         } catch (Exception e) {}
-        cursor.close();
+        finally {
+            cursor.close();
+        }
         return ret;
     }
 }

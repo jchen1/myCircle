@@ -16,14 +16,36 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new HomeFragment())
-                    .commit();
+            if (new DatabaseManager(getApplicationContext()).getAddedContacts().size() == 0) {
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container, new EmptyHomeFragment())
+                        .commit();
+            }
+            else {
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container, new HomeFragment())
+                        .commit();
+            }
         }
 
         Context context = getApplicationContext();
         Intent serviceIntent = new Intent(context, UkService.class);
         context.startService(serviceIntent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (new DatabaseManager(getApplicationContext()).getAddedContacts().size() == 0) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new EmptyHomeFragment())
+                    .commit();
+        }
+        else {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new HomeFragment())
+                    .commit();
+        }
     }
 
     @Override
