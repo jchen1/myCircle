@@ -8,7 +8,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,15 +30,13 @@ public class UkService extends Service {
         scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
-                List<ContactModel> addedContacts = db.getAddedContacts();
-
-                for (ContactModel contact : addedContacts) {
+                for (ContactModel contact : db.getAddedContacts()) {
                     if ((new Date()).getTime() > contact.getLastContacted().getTime()+contact.getTtk().getTime()){
                         db.deleteContact(contact);
                     }
                 }
             }
-        }, 1, 1, TimeUnit.DAYS);
+        }, 0, 1, TimeUnit.DAYS);
 
         return Service.START_NOT_STICKY;
     }

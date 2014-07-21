@@ -29,7 +29,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Uk.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
@@ -42,7 +42,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
                     UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + INT_TYPE + COMMA_SEP +
                     UkEntryContract.ContactEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT + DATE_TYPE + COMMA_SEP +
-                    UkEntryContract.ContactEntry.COLUMN_NAME_TTK + DATE_TYPE +
+                    UkEntryContract.ContactEntry.COLUMN_NAME_TTK + DATE_TYPE + COMMA_SEP +
+                    UkEntryContract.ContactEntry.COLUMN_NAME_CONTACTHISTORY + TEXT_TYPE +
                     " )";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + UkEntryContract.ContactEntry.TABLE_NAME;
@@ -103,6 +104,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             } catch (Exception e) {
                 cursor.close();
             }
+            contact.setContactHistory(parseContactHistoryColumn(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_CONTACTHISTORY))));
             addedContacts.add(contact);
         }
 
@@ -123,7 +125,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
             values.put(UkEntryContract.ContactEntry.COLUMN_NAME_NAME, contact.getName());
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            values.put(UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
             long oneMonthMillis = 1000l * 60l * 60l * 24l * 30l;
             Date ttkDate = new Date(oneMonthMillis);
             values.put(UkEntryContract.ContactEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
@@ -131,6 +132,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             ret = db.insert(UkEntryContract.ContactEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
         }
         curs.close();
+        touchContact(contact);
         return ret;
     }
 
@@ -140,10 +142,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         if (curs.getCount() != 0) {
-
+            curs.moveToFirst();
+            List<Date> contactList = parseContactHistoryColumn(curs.getString(curs.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_CONTACTHISTORY)));
+            contactList.add(new Date());
             // set the format to sql date time
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             values.put(UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
+            values.put(UkEntryContract.ContactEntry.COLUMN_NAME_CONTACTHISTORY, getContactHistoryString(contactList));
 
             ret = db.updateWithOnConflict(UkEntryContract.ContactEntry.TABLE_NAME, values, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, db.CONFLICT_REPLACE);
         }
@@ -177,4 +182,29 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         return ret;
     }
+
+    private List<Date> parseContactHistoryColumn(String col) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<Date> dates = new ArrayList<Date>();
+        String[] strDates = col.split(",");
+        try {
+            for (String str : strDates) {
+                dates.add(dateFormat.parse(str));
+            }
+        } catch (Exception e) {}
+
+        return dates;
+    }
+
+    private String getContactHistoryString(List<Date> dates) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String ret = "";
+        for (int i = 0; i < dates.size() - 1; i++) {
+            ret += dateFormat.format(dates.get(i)) + ",";
+        }
+        ret += dateFormat.format(dates.get(dates.size() - 1));
+
+        return ret;
+    }
+
 }

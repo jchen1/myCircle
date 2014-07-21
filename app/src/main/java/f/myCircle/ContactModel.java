@@ -1,6 +1,9 @@
 package f.myCircle;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by jeff on 7/19/14.
@@ -11,6 +14,7 @@ public class ContactModel {
     private int contactId;
     private Date lastContacted;
     private Date ttk;
+    private List<Date> contactHistory;
 
     private boolean isSelected;
 
@@ -24,6 +28,7 @@ public class ContactModel {
 
     public ContactModel() {
         this.isSelected = false;
+        contactHistory = new ArrayList<Date>();
     }
 
     public ContactModel(String name, int contactId) {
@@ -31,9 +36,10 @@ public class ContactModel {
 
         this.contactId = contactId;
         this.isSelected = false;
+        contactHistory = new ArrayList<Date>();
     }
 
-    public ContactModel(String name, int ukId, int contactId, Date lastContacted, Date ttk) {
+    public ContactModel(String name, int ukId, int contactId, Date lastContacted, Date ttk, List<Date> contactHistory) {
         this.name = name;
 
         this.ukId = ukId;
@@ -42,6 +48,7 @@ public class ContactModel {
 
         this.ttk = ttk;
         this.isSelected = (ukId != -1);
+        this.contactHistory = contactHistory;
     }
 
     public String getName() {
@@ -82,6 +89,35 @@ public class ContactModel {
 
     public void setTtk(Date ttk) {
         this.ttk = ttk;
+    }
+
+    public List<Date> getContactHistory() {
+        return contactHistory;
+    }
+
+    public void setContactHistory(List<Date> contactHistory) {
+        this.contactHistory = contactHistory;
+    }
+
+    public int getLongestStreak() {
+        int longest = 1, current = 1;
+        for (int i = 0; i < contactHistory.size(); i++) {
+            if (i != 0 && onSameDay(contactHistory.get(i - 1), contactHistory.get(i))) {
+                current++;
+            }
+            else if (i != 0) {
+                if (longest < current) {
+                    longest = current;
+                }
+                current = 1;
+            }
+        }
+        return longest;
+    }
+
+    private boolean onSameDay(Date lhs, Date rhs) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        return fmt.format(lhs).equals(fmt.format(rhs));
     }
 }
 

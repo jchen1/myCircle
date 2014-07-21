@@ -29,7 +29,6 @@ public class TeleListener extends PhoneStateListener {
     public void onCallStateChanged(int state, String incomingNumber) {
         super.onCallStateChanged(state, incomingNumber);
         if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-            // using the incoming number, add to db
             isPhoneCalling = true;
         }
         if (TelephonyManager.CALL_STATE_IDLE == state) {
@@ -41,7 +40,7 @@ public class TeleListener extends PhoneStateListener {
                 Handler handler = new Handler();
 
                 //Put in delay because call log is not updated immediately when state changed
-                // The dialler takes a little bit of time to write to it 500ms seems to be enough
+                // The dialer takes a little bit of time to write to it; 500ms seems to be enough
                 handler.postDelayed(new Runnable() {
 
                     @Override

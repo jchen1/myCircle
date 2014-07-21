@@ -33,7 +33,7 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
+        View view;
         if (convertView == null) {
             LayoutInflater inflator = context.getLayoutInflater();
             view = inflator.inflate(R.layout.fragment_add_item, null);
@@ -46,7 +46,8 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
         ContactModel cm = getItem(position);
 
-        if (cm.getLastContacted() != null && cm.getTtk() != null && cm.getLastContacted().getTime() + cm.getTtk().getTime() < (new Date()).getTime()) {
+        if (cm.getLastContacted() != null && cm.getTtk() != null &&
+            cm.getLastContacted().getTime() + cm.getTtk().getTime() < (new Date()).getTime()) {
             remove(cm);
         }
 

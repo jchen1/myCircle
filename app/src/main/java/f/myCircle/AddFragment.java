@@ -23,10 +23,9 @@ public class AddFragment extends ListFragment {
 
     @Override
     public void onAttach(Activity activity) {
-
         super.onAttach(activity);
-
         mActivity = activity;
+        db = new DatabaseManager(mActivity);
     }
 
     @Override
@@ -34,30 +33,24 @@ public class AddFragment extends ListFragment {
         super.onResume();
         final ListView lv = getListView();
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ContactModel cm = (ContactModel)parent.getAdapter().getItem(position);
-            cm.setSelected(!cm.isSelected());
-            lv.invalidateViews();
+                ContactModel cm = (ContactModel)parent.getAdapter().getItem(position);
+                cm.setSelected(!cm.isSelected());
+                lv.invalidateViews();
             }
         });
 
-        db = new DatabaseManager(mActivity);
-
         lv.setAdapter(new ContactArrayAdapter(mActivity, getModel()));
-
     }
 
     private List<ContactModel> getModel() {
         List<ContactModel> allContacts = db.getAllContacts();
-
         Collections.sort(allContacts, new ContactModelNameComparator());
         return allContacts;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add, container, false);
         return rootView;
     }

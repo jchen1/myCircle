@@ -25,20 +25,15 @@ public class HomeFragment extends ListFragment {
 
     @Override
     public void onAttach(Activity activity) {
-
         super.onAttach(activity);
         mActivity = activity;
+        db = new DatabaseManager(mActivity);
     }
 
     public void onResume() {
         super.onResume();
-
         final ListView lv = getListView();
-
-        db = new DatabaseManager(mActivity);
-
         ArrayAdapter<ContactModel> adapter = new HomeArrayAdapter(mActivity, getModel());
-
         lv.setAdapter(adapter);
         final Handler handler = new Handler();
         handler.post(new Runnable() {

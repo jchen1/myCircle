@@ -61,7 +61,6 @@ public class SMSListener {
                 cursor.close();
             }
         };
-        context.getContentResolver().registerContentObserver(
-                Uri.parse(CONTENT_SMS), true, observer);
+        context.getContentResolver().registerContentObserver(Uri.parse(CONTENT_SMS), true, observer);
     }
 }

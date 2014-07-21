@@ -17,5 +17,6 @@ public final class UkEntryContract {
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_LASTCONTACT = "lastcontact";
         public static final String COLUMN_NAME_TTK = "timetokill";
+        public static final String COLUMN_NAME_CONTACTHISTORY = "contacthistory";
     }
 }

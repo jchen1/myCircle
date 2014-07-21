@@ -1,6 +1,7 @@
 package f.myCircle;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,41 +11,32 @@ import android.view.MenuItem;
 import com.f.myCircle.R;
 
 public class MainActivity extends Activity {
+    private EmptyHomeFragment emptyHomeFragment;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            if (new DatabaseManager(getApplicationContext()).getAddedContacts().size() == 0) {
-                getFragmentManager().beginTransaction()
-                        .add(R.id.container, new EmptyHomeFragment())
-                        .commit();
-            }
-            else {
-                getFragmentManager().beginTransaction()
-                        .add(R.id.container, new HomeFragment())
-                        .commit();
-            }
+
+        if (isMyServiceRunning(UkService.class) == false) {
+            Context context = getApplicationContext();
+            Intent serviceIntent = new Intent(context, UkService.class);
+            context.startService(serviceIntent);
         }
 
-        Context context = getApplicationContext();
-        Intent serviceIntent = new Intent(context, UkService.class);
-        context.startService(serviceIntent);
+        emptyHomeFragment = new EmptyHomeFragment();
+        homeFragment = new HomeFragment();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (new DatabaseManager(getApplicationContext()).getAddedContacts().size() == 0) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new EmptyHomeFragment())
-                    .commit();
+            getFragmentManager().beginTransaction().replace(R.id.container, emptyHomeFragment).commit();
         }
         else {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new HomeFragment())
-                    .commit();
+            getFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
         }
     }
 
@@ -71,5 +63,15 @@ public class MainActivity extends Activity {
     private void openAdd() {
         Intent intent = new Intent(this, AddActivity.class);
         startActivity(intent);
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
