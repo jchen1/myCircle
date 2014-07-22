@@ -132,13 +132,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
             ret = db.insert(UkEntryContract.ContactEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
         }
         curs.close();
-        touchContact(contact);
+//        touchContact(contact);
         return ret;
     }
 
     public boolean touchContact(ContactModel contact) {
         long ret = 0;
-        Cursor curs = db.query(UkEntryContract.ContactEntry.TABLE_NAME, new String[]{UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID}, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, null, null, null, null);
+        Cursor curs = db.query(UkEntryContract.ContactEntry.TABLE_NAME, new String[]{UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID, UkEntryContract.ContactEntry.COLUMN_NAME_CONTACTHISTORY}, UkEntryContract.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, null, null, null, null);
         ContentValues values = new ContentValues();
 
         if (curs.getCount() != 0) {
@@ -186,6 +186,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private List<Date> parseContactHistoryColumn(String col) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<Date> dates = new ArrayList<Date>();
+        if (col == null) {
+            return dates;
+        }
         String[] strDates = col.split(",");
         try {
             for (String str : strDates) {
