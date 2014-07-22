@@ -101,10 +101,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
             try {
                 contact.setLastContacted(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_LASTCONTACT))));
                 contact.setTtk(sdf.parse(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_TTK))));
+                contact.setContactHistory(parseContactHistoryColumn(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_CONTACTHISTORY))));
+
             } catch (Exception e) {
                 cursor.close();
             }
-            contact.setContactHistory(parseContactHistoryColumn(cursor.getString(cursor.getColumnIndex(UkEntryContract.ContactEntry.COLUMN_NAME_CONTACTHISTORY))));
             addedContacts.add(contact);
         }
 
@@ -132,7 +133,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             ret = db.insert(UkEntryContract.ContactEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
         }
         curs.close();
-//        touchContact(contact);
+        touchContact(contact);
         return ret;
     }
 
