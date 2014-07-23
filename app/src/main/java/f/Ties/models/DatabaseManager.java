@@ -1,4 +1,4 @@
-package f.myCircle.models;
+package f.Ties.models;
 
 import android.content.ContentValues;
 import android.content.Context;

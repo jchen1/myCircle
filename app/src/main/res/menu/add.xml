@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="f.myCircle.dummy.AddFragment" >
+    tools:context="f.Ties.dummy.AddFragment" >
     <item android:id="@+id/action_confirm"
         android:title="@string/action_confirm"
         android:orderInCategory="100"

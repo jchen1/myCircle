@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.fambam.myapplication"
+        applicationId "com.f.Ties"
         minSdkVersion 17
         targetSdkVersion 20
         versionCode 1
@@ -19,7 +19,7 @@ android {
     }
     sourceSets {
         main {
-            java.srcDirs = ['src/main/java', 'src/main/java/f.uk/interfaces', 'src/main/java/background']
+            java.srcDirs = ['src/main/java']
         }
     }
 }

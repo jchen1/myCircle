@@ -1,4 +1,4 @@
-package f.myCircle.models;
+package f.Ties.models;
 
 import java.util.Comparator;
 

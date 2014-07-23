@@ -1,4 +1,4 @@
-package f.myCircle.background;
+package f.Ties.background;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,8 +9,8 @@ import android.provider.ContactsContract;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import f.myCircle.models.ContactModel;
-import f.myCircle.models.DatabaseManager;
+import f.Ties.models.ContactModel;
+import f.Ties.models.DatabaseManager;
 
 /**
  * Created by jeff on 7/18/14.

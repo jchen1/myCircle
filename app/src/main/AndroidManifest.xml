@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="f.myCircle.activities.MainActivity"
+            android:name="f.Ties.activities.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,12 +25,12 @@
         </activity>
 
         <service
-            android:name="f.myCircle.background.UkService"
+            android:name="f.Ties.background.UkService"
             android:icon="@drawable/logo"
             android:label="@string/service_name" >
         </service>
 
-        <receiver android:name="f.myCircle.background.BootBroadcastReceiver" >
+        <receiver android:name="f.Ties.background.BootBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
@@ -38,7 +38,7 @@
         </receiver>
 
         <activity
-            android:name="f.myCircle.activities.AddActivity"
+            android:name="f.Ties.activities.AddActivity"
             android:label="@string/title_activity_add" >
         </activity>
     </application>

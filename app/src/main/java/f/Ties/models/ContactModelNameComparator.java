@@ -1,4 +1,4 @@
-package f.myCircle.models;
+package f.Ties.models;
 
 /**
  * Created by jeff on 7/19/14.

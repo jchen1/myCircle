@@ -1,4 +1,4 @@
-package f.myCircle.util;
+package f.Ties.util;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -19,7 +19,7 @@ import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
-import f.myCircle.models.ContactModel;
+import f.Ties.models.ContactModel;
 
 /**
  * This class wraps up completing some arbitrary long running work when loading a bitmap to an

@@ -1,4 +1,4 @@
-package f.myCircle.background;
+package f.Ties.background;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -18,9 +18,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import f.myCircle.activities.MainActivity;
-import f.myCircle.models.DatabaseManager;
-import f.myCircle.models.ContactModel;
+import f.Ties.activities.MainActivity;
+import f.Ties.models.DatabaseManager;
+import f.Ties.models.ContactModel;
 
 /**
  * Created by jeff on 7/18/14.

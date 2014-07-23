@@ -1,4 +1,4 @@
-package f.myCircle.background;
+package f.Ties.background;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

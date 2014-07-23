@@ -1,4 +1,4 @@
-package f.myCircle.util;
+package f.Ties.util;
 
 import android.annotation.TargetApi;
 import android.app.FragmentManager;
@@ -18,11 +18,6 @@ import android.util.LruCache;
 import com.f.myCircle.BuildConfig;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

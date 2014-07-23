@@ -1,4 +1,4 @@
-package f.myCircle.util;
+package f.Ties.util;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -11,7 +11,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 
-import f.myCircle.models.ContactModel;
+import f.Ties.models.ContactModel;
 
 /**
  * A simple subclass of {@link ImageWorker} that resizes images from resources given a target width

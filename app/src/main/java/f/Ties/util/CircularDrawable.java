@@ -1,4 +1,4 @@
-package f.myCircle.util;
+package f.Ties.util;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
