@@ -47,7 +47,7 @@ public class TeleListener extends PhoneStateListener {
                     public void run() {
                         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER}, null, null, CallLog.Calls.DATE +" desc");
                         if (cursor.moveToNext()) {
-                            String lastCallNumber = cursor.getString(cursor.getColumnIndex("address"));
+                            String lastCallNumber = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
                             Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(lastCallNumber));
 
                             Cursor cur = context.getContentResolver().query(uri, new String[]{ContactsContract.Contacts._ID}, null, null, null);
