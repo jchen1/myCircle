@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.activities;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -9,6 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.f.myCircle.R;
+
+import f.myCircle.models.DatabaseManager;
+import f.myCircle.background.UkService;
+import f.myCircle.fragments.EmptyHomeFragment;
+import f.myCircle.fragments.HomeFragment;
 
 public class MainActivity extends Activity {
     private EmptyHomeFragment emptyHomeFragment;

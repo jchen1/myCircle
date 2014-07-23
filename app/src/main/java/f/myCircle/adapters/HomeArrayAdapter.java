@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -12,6 +12,8 @@ import com.f.myCircle.R;
 
 import java.util.Date;
 import java.util.List;
+
+import f.myCircle.models.ContactModel;
 
 public class HomeArrayAdapter extends ArrayAdapter<ContactModel> {
 

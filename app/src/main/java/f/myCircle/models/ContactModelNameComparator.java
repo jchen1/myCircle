@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.models;
 
 /**
  * Created by jeff on 7/19/14.

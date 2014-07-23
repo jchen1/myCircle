@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.f.myCircle.R;
 
 import java.util.Date;
 import java.util.List;
+
+import f.myCircle.models.ContactModel;
 
 /**
  * Created by jeff on 7/19/14.
@@ -28,6 +31,7 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
     }
 
     static class ViewHolder {
+        protected ImageView contactPhoto;
         protected TextView name;
     }
 
@@ -39,10 +43,14 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
             view = inflator.inflate(R.layout.fragment_add_item, null);
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.name = (TextView) view.findViewById(R.id.name);
+            viewHolder.contactPhoto = (ImageView) view.findViewById(R.id.contactPhoto);
             view.setTag(viewHolder);
         } else {
             view = convertView;
         }
+
+        ViewHolder holder = (ViewHolder) view.getTag();
+        holder.name.setText(list.get(position).getName());
 
         ContactModel cm = getItem(position);
 
@@ -53,15 +61,15 @@ public class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
         if (cm.isSelected()) {
             view.setBackgroundColor(Color.rgb(52, 152, 219));
-            ((TextView) view.findViewById(R.id.name)).setTextColor(Color.WHITE);
+            holder.name.setTextColor(Color.WHITE);
         }
         else {
             view.setBackgroundColor(Color.WHITE);
-            ((TextView) view.findViewById(R.id.name)).setTextColor(Color.BLACK);
+            holder.name.setTextColor(Color.BLACK);
         }
 
-        ViewHolder holder = (ViewHolder) view.getTag();
-        holder.name.setText(list.get(position).getName());
+//        holder.contactPhoto.setImageBitmap(cm.getContactPhoto());
+
         return view;
     }
 }

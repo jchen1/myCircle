@@ -1,14 +1,16 @@
-package f.myCircle;
+package f.myCircle.background;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+
+import f.myCircle.models.ContactModel;
+import f.myCircle.models.DatabaseManager;
 
 /**
  * Created by jeff on 7/18/14.

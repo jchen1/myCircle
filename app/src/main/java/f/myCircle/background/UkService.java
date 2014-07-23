@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.background;
 
 import android.app.Service;
 import android.content.Context;
@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import f.myCircle.models.DatabaseManager;
+import f.myCircle.models.ContactModel;
 
 /**
  * Created by jeff on 7/18/14.

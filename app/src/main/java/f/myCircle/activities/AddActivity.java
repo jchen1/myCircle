@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.f.myCircle.R;
+
+import f.myCircle.fragments.AddFragment;
+import f.myCircle.models.DatabaseManager;
+import f.myCircle.models.ContactModel;
 
 public class AddActivity extends Activity {
 

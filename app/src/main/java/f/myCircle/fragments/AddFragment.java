@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.fragments;
 
 import android.app.Activity;
 import android.app.ListFragment;
@@ -13,6 +13,11 @@ import com.f.myCircle.R;
 
 import java.util.Collections;
 import java.util.List;
+
+import f.myCircle.adapters.ContactArrayAdapter;
+import f.myCircle.models.DatabaseManager;
+import f.myCircle.models.ContactModel;
+import f.myCircle.models.ContactModelNameComparator;
 
 /**
  * Created by jeff on 7/19/14.

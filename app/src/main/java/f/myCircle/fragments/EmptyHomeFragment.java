@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.fragments;
 
 import android.os.Bundle;
 import android.app.Fragment;

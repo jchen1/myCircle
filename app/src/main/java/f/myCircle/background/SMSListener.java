@@ -1,10 +1,13 @@
-package f.myCircle;
+package f.myCircle.background;
 
 import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+
+import f.myCircle.models.ContactModel;
+import f.myCircle.models.DatabaseManager;
 
 /**
  * Created by jeff on 7/19/14.

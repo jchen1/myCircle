@@ -1,4 +1,4 @@
-package f.myCircle;
+package f.myCircle.fragments;
 
 import android.app.Activity;
 import android.app.ListFragment;
@@ -14,6 +14,11 @@ import com.f.myCircle.R;
 
 import java.util.Collections;
 import java.util.List;
+
+import f.myCircle.models.DatabaseManager;
+import f.myCircle.adapters.HomeArrayAdapter;
+import f.myCircle.models.ContactModel;
+import f.myCircle.models.ContactModelTimeComparator;
 
 /**
  * Created by jeff on 7/19/14.
