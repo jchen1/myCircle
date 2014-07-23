@@ -183,7 +183,7 @@ public class HomeFragment extends ListFragment {
                 view.setBackgroundColor(Color.rgb(46, 204, 113));
             }
 
-            mImageResizer.loadImage(cm.getContactUri(), holder.contactPhoto);
+            mImageResizer.loadImage(cm, holder.contactPhoto);
 
             return view;
         }

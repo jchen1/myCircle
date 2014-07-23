@@ -134,11 +134,10 @@ public class AddFragment extends ListFragment {
             } else {
                 view = convertView;
             }
+            ContactModel cm = getItem(position);
 
             ViewHolder holder = (ViewHolder) view.getTag();
-            holder.name.setText(list.get(position).getName());
-
-            ContactModel cm = getItem(position);
+            holder.name.setText(cm.getName());
 
             if (cm.getLastContacted() != null && cm.getTtk() != null &&
                     cm.getLastContacted().getTime() + cm.getTtk().getTime() < (new Date()).getTime()) {
@@ -146,7 +145,7 @@ public class AddFragment extends ListFragment {
             }
 
             if (cm.isSelected()) {
-                view.setBackgroundColor(Color.rgb(52, 152, 219));
+                view.setBackgroundColor(Color.rgb(52, 152, 219));   //dat peter river
                 holder.name.setTextColor(Color.WHITE);
             }
             else {
@@ -154,7 +153,7 @@ public class AddFragment extends ListFragment {
                 holder.name.setTextColor(Color.BLACK);
             }
 
-            mImageResizer.loadImage(cm.getContactUri(), holder.contactPhoto);
+            mImageResizer.loadImage(cm, holder.contactPhoto);
 
             return view;
         }
