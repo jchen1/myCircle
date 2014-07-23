@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import f.myCircle.models.DatabaseManager;
 import f.myCircle.models.ContactModel;
 import f.myCircle.models.ContactModelNameComparator;
+import f.myCircle.models.DatabaseManager;
 import f.myCircle.util.ImageCache;
 import f.myCircle.util.ImageResizer;
 
@@ -137,6 +136,7 @@ public class AddFragment extends ListFragment {
             ContactModel cm = getItem(position);
 
             ViewHolder holder = (ViewHolder) view.getTag();
+            mImageResizer.loadImage(cm, holder.contactPhoto);
             holder.name.setText(cm.getName());
 
             if (cm.getLastContacted() != null && cm.getTtk() != null &&
@@ -152,8 +152,6 @@ public class AddFragment extends ListFragment {
                 view.setBackgroundColor(Color.WHITE);
                 holder.name.setTextColor(Color.BLACK);
             }
-
-            mImageResizer.loadImage(cm, holder.contactPhoto);
 
             return view;
         }

@@ -57,7 +57,7 @@ public class ImageCache {
     private static final boolean DEFAULT_DISK_CACHE_ENABLED = true;
     private static final boolean DEFAULT_INIT_DISK_CACHE_ON_CREATE = false;
 
-    private DiskLruCache mDiskLruCache;
+//    private DiskLruCache mDiskLruCache;
     private LruCache<String, CircularDrawable> mMemoryCache;
     private ImageCacheParams mCacheParams;
     private final Object mDiskCacheLock = new Object();
@@ -173,6 +173,7 @@ public class ImageCache {
      */
     public void initDiskCache() {
         // Set up disk cache
+        /*
         synchronized (mDiskCacheLock) {
             if (mDiskLruCache == null || mDiskLruCache.isClosed()) {
                 File diskCacheDir = mCacheParams.diskCacheDir;
@@ -196,7 +197,7 @@ public class ImageCache {
             }
             mDiskCacheStarting = false;
             mDiskCacheLock.notifyAll();
-        }
+        }*/
     }
 
     /**
@@ -215,6 +216,7 @@ public class ImageCache {
             mMemoryCache.put(data, value);
         }
 
+        /*
         synchronized (mDiskCacheLock) {
             // Add to disk cache
             if (mDiskLruCache != null) {
@@ -246,7 +248,7 @@ public class ImageCache {
                     } catch (IOException e) {}
                 }
             }
-        }
+        }*/
         //END_INCLUDE(add_bitmap_to_cache)
     }
 
@@ -279,6 +281,7 @@ public class ImageCache {
         final String key = hashKeyForDisk(data);
         Bitmap bitmap = null;
 
+        /*
         synchronized (mDiskCacheLock) {
             while (mDiskCacheStarting) {
                 try {
@@ -311,7 +314,8 @@ public class ImageCache {
                 }
             }
             return bitmap;
-        }
+        }*/
+        return null;
         //END_INCLUDE(get_bitmap_from_disk_cache)
     }
 
@@ -360,7 +364,7 @@ public class ImageCache {
         if (mMemoryCache != null) {
             mMemoryCache.evictAll();
         }
-
+        /*
         synchronized (mDiskCacheLock) {
             mDiskCacheStarting = true;
             if (mDiskLruCache != null && !mDiskLruCache.isClosed()) {
@@ -372,7 +376,7 @@ public class ImageCache {
                 mDiskLruCache = null;
                 initDiskCache();
             }
-        }
+        }*/
     }
 
     /**
@@ -380,6 +384,7 @@ public class ImageCache {
      * disk access so this should not be executed on the main/UI thread.
      */
     public void flush() {
+        /*
         synchronized (mDiskCacheLock) {
             if (mDiskLruCache != null) {
                 try {
@@ -388,7 +393,7 @@ public class ImageCache {
                     Log.e(TAG, "flush - " + e);
                 }
             }
-        }
+        }*/
     }
 
     /**
@@ -396,6 +401,7 @@ public class ImageCache {
      * disk access so this should not be executed on the main/UI thread.
      */
     public void close() {
+        /*
         synchronized (mDiskCacheLock) {
             if (mDiskLruCache != null) {
                 try {
@@ -407,7 +413,7 @@ public class ImageCache {
                     Log.e(TAG, "close - " + e);
                 }
             }
-        }
+        }*/
     }
 
     /**

@@ -37,16 +37,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
 
-            "CREATE TABLE " + ContactEntryModel.ContactEntry.TABLE_NAME + " (" +
-                    ContactEntryModel.ContactEntry._ID + " INTEGER PRIMARY KEY," +
-                    ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID + INT_TYPE + COMMA_SEP +
-                    ContactEntryModel.ContactEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
-                    ContactEntryModel.ContactEntry.COLUMN_NAME_LASTCONTACT + DATE_TYPE + COMMA_SEP +
-                    ContactEntryModel.ContactEntry.COLUMN_NAME_TTK + DATE_TYPE + COMMA_SEP +
-                    ContactEntryModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY + TEXT_TYPE +
+            "CREATE TABLE " + ContactModel.ContactEntry.TABLE_NAME + " (" +
+                    ContactModel.ContactEntry._ID + " INTEGER PRIMARY KEY," +
+                    ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID + INT_TYPE + COMMA_SEP +
+                    ContactModel.ContactEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                    ContactModel.ContactEntry.COLUMN_NAME_LASTCONTACT + DATE_TYPE + COMMA_SEP +
+                    ContactModel.ContactEntry.COLUMN_NAME_TTK + DATE_TYPE + COMMA_SEP +
+                    ContactModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY + TEXT_TYPE +
                     " )";
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + ContactEntryModel.ContactEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + ContactModel.ContactEntry.TABLE_NAME;
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
@@ -76,9 +76,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
             String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID));
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
             ContactModel item = new ContactModel(name, Integer.parseInt(contactId));
-            Cursor selectedCursor = db.query(ContactEntryModel.ContactEntry.TABLE_NAME,
-                                            new String[]{ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID},
-                                            ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=" + contactId,
+            Cursor selectedCursor = db.query(ContactModel.ContactEntry.TABLE_NAME,
+                                            new String[]{ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID},
+                                            ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=" + contactId,
                                             null, null, null, null);
             item.setSelected(selectedCursor.getCount() > 0);
             selectedCursor.close();
@@ -94,18 +94,18 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public List<ContactModel> getAddedContacts() {
-        Cursor cursor = db.query(ContactEntryModel.ContactEntry.TABLE_NAME, null, null, null, null, null, null, null);
+        Cursor cursor = db.query(ContactModel.ContactEntry.TABLE_NAME, null, null, null, null, null, null, null);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         List<ContactModel> addedContacts = new ArrayList<ContactModel>();
         while (cursor.moveToNext()) {
             ContactModel contact = new ContactModel();
-            contact.setName(cursor.getString(cursor.getColumnIndex(ContactEntryModel.ContactEntry.COLUMN_NAME_NAME)));
-            contact.setUkId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactEntryModel.ContactEntry._ID))));
-            contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID))));
+            contact.setName(cursor.getString(cursor.getColumnIndex(ContactModel.ContactEntry.COLUMN_NAME_NAME)));
+            contact.setUkId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactModel.ContactEntry._ID))));
+            contact.setContactId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID))));
             try {
-                contact.setLastContacted(sdf.parse(cursor.getString(cursor.getColumnIndex(ContactEntryModel.ContactEntry.COLUMN_NAME_LASTCONTACT))));
-                contact.setTtk(sdf.parse(cursor.getString(cursor.getColumnIndex(ContactEntryModel.ContactEntry.COLUMN_NAME_TTK))));
-                contact.setContactHistory(parseContactHistoryColumn(cursor.getString(cursor.getColumnIndex(ContactEntryModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY))));
+                contact.setLastContacted(sdf.parse(cursor.getString(cursor.getColumnIndex(ContactModel.ContactEntry.COLUMN_NAME_LASTCONTACT))));
+                contact.setTtk(sdf.parse(cursor.getString(cursor.getColumnIndex(ContactModel.ContactEntry.COLUMN_NAME_TTK))));
+                contact.setContactHistory(parseContactHistoryColumn(cursor.getString(cursor.getColumnIndex(ContactModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY))));
 
             } catch (Exception e) {
                 cursor.close();
@@ -121,18 +121,18 @@ public class DatabaseManager extends SQLiteOpenHelper {
     /* for each ContactModel, adds the contact to our db iff they do not exist */
     public long addContact(ContactModel contact) {
         long ret = 0;
-        Cursor curs = db.query(ContactEntryModel.ContactEntry.TABLE_NAME, new String[]{ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID}, ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{"" + contact.getContactId()}, null, null, null, null);
+        Cursor curs = db.query(ContactModel.ContactEntry.TABLE_NAME, new String[]{ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID}, ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{"" + contact.getContactId()}, null, null, null, null);
         if (curs.getCount() == 0) {
             ContentValues values = new ContentValues();
-            values.put(ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID, contact.getContactId());
-            values.put(ContactEntryModel.ContactEntry.COLUMN_NAME_NAME, contact.getName());
+            values.put(ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID, contact.getContactId());
+            values.put(ContactModel.ContactEntry.COLUMN_NAME_NAME, contact.getName());
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             long oneMonthMillis = 1000l * 60l * 60l * 24l * 30l;
             Date ttkDate = new Date(oneMonthMillis);
-            values.put(ContactEntryModel.ContactEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
+            values.put(ContactModel.ContactEntry.COLUMN_NAME_TTK, dateFormat.format(ttkDate));
 
-            ret = db.insert(ContactEntryModel.ContactEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
+            ret = db.insert(ContactModel.ContactEntry.TABLE_NAME, "don't worry about this. no seriously.", values);
         }
         curs.close();
         touchContact(contact);
@@ -141,19 +141,19 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     public boolean touchContact(ContactModel contact) {
         long ret = 0;
-        Cursor curs = db.query(ContactEntryModel.ContactEntry.TABLE_NAME, new String[]{ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID, ContactEntryModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY}, ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, null, null, null, null);
+        Cursor curs = db.query(ContactModel.ContactEntry.TABLE_NAME, new String[]{ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID, ContactModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY}, ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, null, null, null, null);
         ContentValues values = new ContentValues();
 
         if (curs.getCount() != 0) {
             curs.moveToFirst();
-            List<Date> contactList = parseContactHistoryColumn(curs.getString(curs.getColumnIndex(ContactEntryModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY)));
+            List<Date> contactList = parseContactHistoryColumn(curs.getString(curs.getColumnIndex(ContactModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY)));
             contactList.add(new Date());
             // set the format to sql date time
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            values.put(ContactEntryModel.ContactEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
-            values.put(ContactEntryModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY, getContactHistoryString(contactList));
+            values.put(ContactModel.ContactEntry.COLUMN_NAME_LASTCONTACT, dateFormat.format(new Date()));
+            values.put(ContactModel.ContactEntry.COLUMN_NAME_CONTACTHISTORY, getContactHistoryString(contactList));
 
-            ret = db.updateWithOnConflict(ContactEntryModel.ContactEntry.TABLE_NAME, values, ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, db.CONFLICT_REPLACE);
+            ret = db.updateWithOnConflict(ContactModel.ContactEntry.TABLE_NAME, values, ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()}, db.CONFLICT_REPLACE);
         }
         curs.close();
 
@@ -162,7 +162,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     /* removeContact() removes from our db; deleteContact() deletes entirely. The ContactModel should have its Android database id.  */
     public int removeContact(ContactModel contact) {
-        return db.delete(ContactEntryModel.ContactEntry.TABLE_NAME, ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()});
+        return db.delete(ContactModel.ContactEntry.TABLE_NAME, ContactModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=?", new String[]{""+contact.getContactId()});
     }
 
     public int deleteContact(ContactModel contact) {

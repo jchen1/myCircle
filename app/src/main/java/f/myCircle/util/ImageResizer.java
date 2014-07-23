@@ -1,28 +1,15 @@
 package f.myCircle.util;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.ContactsContract;
-import android.util.Log;
-import android.util.TypedValue;
-
-import com.f.myCircle.BuildConfig;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
 
 import f.myCircle.models.ContactModel;
 
@@ -33,18 +20,6 @@ import f.myCircle.models.ContactModel;
  */
 public class ImageResizer extends ImageWorker {
     private static final String TAG = "ImageResizer";
-    protected int mImageWidth;
-    protected int mImageHeight;
-
-    // taken from flatuicolors lol
-    private static final int[] colors = {
-            Color.rgb(26, 188, 156),
-            Color.rgb(155, 89, 182),
-            Color.rgb(46, 204, 113),
-            Color.rgb(241, 196, 15),
-            Color.rgb(230, 126, 34),
-            Color.rgb(231, 76, 60)
-    };
 
     /**
      * Initialize providing a single target image size (used for both width and height);
@@ -54,8 +29,7 @@ public class ImageResizer extends ImageWorker {
      * @param imageHeight
      */
     public ImageResizer(Context context, int imageWidth, int imageHeight) {
-        super(context);
-        setImageSize(imageWidth, imageHeight);
+        super(context, imageWidth, imageHeight);
     }
 
     /**
@@ -65,28 +39,7 @@ public class ImageResizer extends ImageWorker {
      * @param imageSize
      */
     public ImageResizer(Context context, int imageSize) {
-        super(context);
-        setImageSize(imageSize);
-    }
-
-    /**
-     * Set the target image width and height.
-     *
-     * @param width
-     * @param height
-     */
-    public void setImageSize(int width, int height) {
-        mImageWidth = width;
-        mImageHeight = height;
-    }
-
-    /**
-     * Set the target image size (width and height will be the same).
-     *
-     * @param size
-     */
-    public void setImageSize(int size) {
-        setImageSize(size, size);
+        super(context, imageSize, imageSize);
     }
 
     /**
@@ -115,13 +68,12 @@ public class ImageResizer extends ImageWorker {
                                                        int reqWidth, int reqHeight, ImageCache cache) {
 
         // BEGIN_INCLUDE (read_bitmap_dimensions)
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-
         InputStream stream = openDisplayPhoto(context, cm.getContactUri());
         if (stream != null) {
-            BitmapFactory.decodeStream(openDisplayPhoto(context, cm.getContactUri()), null, options);
+            // First decode with inJustDecodeBounds=true to check dimensions
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(stream, null, options);
 
             // Calculate inSampleSize
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
@@ -135,36 +87,8 @@ public class ImageResizer extends ImageWorker {
 
             return BitmapFactory.decodeStream(openDisplayPhoto(context, cm.getContactUri()));
         }
-        else {
-            Bitmap bitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics(), reqWidth, reqHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            Paint paint = new Paint();
-            paint.setStyle(Paint.Style.FILL);
-            paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-            paint.setFilterBitmap(true);
-            paint.setDither(true);
-            paint.setColor(getRandomColor(cm.getName()));    //peter river lel
-            canvas.drawCircle(reqWidth / 2, reqHeight / 2, Math.min(reqWidth, reqHeight) / 2, paint);
-            paint.setColor(Color.WHITE);
-            paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, context.getResources().getDisplayMetrics()));
-            String text = cm.getName().substring(0, 1).toUpperCase();
 
-            RectF bounds = new RectF(canvas.getClipBounds());
-// measure text width
-            bounds.right = paint.measureText(text, 0, text.length());
-// measure text height
-            bounds.bottom = paint.descent() - paint.ascent();
-
-            bounds.left += (canvas.getClipBounds().width() - bounds.right) / 2.0f;
-            bounds.top += (canvas.getClipBounds().height() - bounds.bottom) / 2.0f;
-
-            canvas.drawText(text, bounds.left, bounds.top - paint.ascent(), paint);
-            return bitmap;
-        }
-    }
-
-    private int getRandomColor(String name) {
-        return colors[(int)(name.hashCode() & 0xffffffffl) % colors.length];
+        return null;
     }
 
     private static InputStream openDisplayPhoto(Context context, Uri contactUri) {
@@ -207,7 +131,6 @@ public class ImageResizer extends ImageWorker {
         return BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static void addInBitmapOptions(BitmapFactory.Options options, ImageCache cache) {
         //BEGIN_INCLUDE(add_bitmap_options)
         // inBitmap only works with mutable bitmaps so force the decoder to

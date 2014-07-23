@@ -143,6 +143,8 @@ public class HomeFragment extends ListFragment {
             holder.name.setText(list.get(position).getName());
 
             ContactModel cm = getItem(position);
+            mImageResizer.loadImage(cm, holder.contactPhoto);
+
 
             if (cm.isSelected()) {
                 ((TextView) view.findViewById(R.id.name)).setTextColor(Color.WHITE);
@@ -183,7 +185,6 @@ public class HomeFragment extends ListFragment {
                 view.setBackgroundColor(Color.rgb(46, 204, 113));
             }
 
-            mImageResizer.loadImage(cm, holder.contactPhoto);
 
             return view;
         }

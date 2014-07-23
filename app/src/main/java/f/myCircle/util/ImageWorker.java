@@ -6,15 +6,20 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
+import android.util.TypedValue;
 import android.widget.ImageView;
 
-import com.f.myCircle.BuildConfig;
-
 import java.lang.ref.WeakReference;
+
+import f.myCircle.models.ContactModel;
 
 /**
  * This class wraps up completing some arbitrary long running work when loading a bitmap to an
@@ -33,6 +38,9 @@ public abstract class ImageWorker {
     protected boolean mPauseWork = false;
     private final Object mPauseWorkLock = new Object();
 
+    protected int mImageWidth;
+    protected int mImageHeight;
+
     protected Resources mResources;
 
     private static final int MESSAGE_CLEAR = 0;
@@ -41,9 +49,32 @@ public abstract class ImageWorker {
     private static final int MESSAGE_CLOSE = 3;
     protected Context mContext;
 
-    protected ImageWorker(Context context) {
+
+    // taken from flatuicolors lol
+    private static final int[] colors = {
+            Color.rgb(26, 188, 156),
+            Color.rgb(155, 89, 182),
+            Color.rgb(46, 204, 113),
+            Color.rgb(241, 196, 15),
+            Color.rgb(230, 126, 34),
+            Color.rgb(231, 76, 60)
+    };
+
+    protected ImageWorker(Context context, int imageWidth, int imageHeight) {
         mResources = context.getResources();
+        setImageSize(imageWidth, imageHeight);
         this.mContext = context;
+    }
+
+    /**
+     * Set the target image width and height.
+     *
+     * @param width
+     * @param height
+     */
+    public void setImageSize(int width, int height) {
+        mImageWidth = width;
+        mImageHeight = height;
     }
 
     /**
@@ -74,8 +105,29 @@ public abstract class ImageWorker {
         } else if (cancelPotentialWork(data, imageView)) {
             //BEGIN_INCLUDE(execute_background_task)
             final BitmapWorkerTask task = new BitmapWorkerTask(data, imageView);
+            Bitmap bitmap = Bitmap.createBitmap(mContext.getResources().getDisplayMetrics(), mImageWidth, mImageHeight, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            Paint paint = new Paint();
+            paint.setStyle(Paint.Style.FILL);
+            paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+            paint.setFilterBitmap(true);
+            paint.setDither(true);
+            paint.setColor(getRandomColor(((ContactModel) data).getName()));    //peter river lel
+            canvas.drawCircle(mImageWidth / 2, mImageHeight / 2, Math.min(mImageWidth, mImageHeight) / 2, paint);
+            paint.setColor(Color.WHITE);
+            paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, mContext.getResources().getDisplayMetrics()));
+            String text = ((ContactModel)data).getName().substring(0, 1).toUpperCase();
+
+            RectF bounds = new RectF(canvas.getClipBounds());
+            bounds.right = paint.measureText(text, 0, text.length());
+            bounds.bottom = paint.descent() - paint.ascent();
+
+            bounds.left += (canvas.getClipBounds().width() - bounds.right) / 2.0f;
+            bounds.top += (canvas.getClipBounds().height() - bounds.bottom) / 2.0f;
+
+            canvas.drawText(text, bounds.left, bounds.top - paint.ascent(), paint);
             final AsyncDrawable asyncDrawable =
-                    new AsyncDrawable(mResources, mLoadingBitmap, task);
+                    new AsyncDrawable(mResources, bitmap, task);
             imageView.setImageDrawable(asyncDrawable);
 
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -429,6 +481,12 @@ public abstract class ImageWorker {
             mImageCache = null;
         }
     }
+
+
+    private int getRandomColor(String name) {
+        return colors[(int)((name.hashCode() & 0xffffffffl) % colors.length)];
+    }
+
 
     public void clearCache() {
         new CacheAsyncTask().execute(MESSAGE_CLEAR);

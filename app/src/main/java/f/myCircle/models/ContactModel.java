@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 
 import java.io.InputStream;
@@ -138,6 +139,16 @@ public class ContactModel {
             return false;
         }
         return ((ContactModel)other).getContactId() == getContactId();
+    }
+
+    /* Inner class that defines the table contents */
+    public static abstract class ContactEntry implements BaseColumns {
+        public static final String TABLE_NAME = "UkContacts";
+        public static final String COLUMN_NAME_ENTRY_ID = "contactid";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_LASTCONTACT = "lastcontact";
+        public static final String COLUMN_NAME_TTK = "timetokill";
+        public static final String COLUMN_NAME_CONTACTHISTORY = "contacthistory";
     }
 }
 

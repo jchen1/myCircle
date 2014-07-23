@@ -9,6 +9,6 @@ import java.util.Comparator;
 public class ContactModelNameComparator implements Comparator<ContactModel> {
     @Override
     public int compare(ContactModel lhs, ContactModel rhs) {
-        return lhs.getName().compareTo(rhs.getName());
+        return lhs.getName().toUpperCase().compareTo(rhs.getName().toUpperCase());
     }
 }
