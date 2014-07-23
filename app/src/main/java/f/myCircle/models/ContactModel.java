@@ -22,7 +22,6 @@ public class ContactModel {
     private Date lastContacted;
     private Date ttk;
     private List<Date> contactHistory;
-    private Bitmap contactPhoto;
 
     private boolean isSelected;
 
@@ -60,9 +59,7 @@ public class ContactModel {
     }
 
     public Uri getContactUri() {
-        if (contactId == 0) {
-            return null;
-        }
+
         return ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
     }
 
@@ -130,26 +127,17 @@ public class ContactModel {
         return longest;
     }
 
-    public Bitmap getContactPhoto() {
-        return contactPhoto;
-    }
-
-    public void setContactPhoto(Bitmap contactPhoto) {
-        this.contactPhoto = contactPhoto;
-    }
-/*
-    public void setContactPhoto(InputStream contactPhoto) {
-        if (contactPhoto == null) {
-            this.contactPhoto = BitmapFactory.decodeResource(get)
-        }
-        else {
-            this.contactPhoto = BitmapFactory.decodeStream(contactPhoto);
-        }
-    }*/
-
     private boolean onSameDay(Date lhs, Date rhs) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         return fmt.format(lhs).equals(fmt.format(rhs));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof ContactModel)) {
+            return false;
+        }
+        return ((ContactModel)other).getContactId() == getContactId();
     }
 }
 

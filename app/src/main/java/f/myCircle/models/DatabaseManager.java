@@ -8,15 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import f.myCircle.models.ContactEntryModel;
-import f.myCircle.models.ContactModel;
 
 /**
  * Created by jeff on 7/18/14.
@@ -84,20 +81,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
                                             ContactEntryModel.ContactEntry.COLUMN_NAME_ENTRY_ID + "=" + contactId,
                                             null, null, null, null);
             item.setSelected(selectedCursor.getCount() > 0);
-//            InputStream contactPhoto = ContactsContract.Contacts.openContactPhotoInputStream(ctx.getContentResolver(), item.getContactUri(), true);
-            InputStream contactPhoto = null;
-            if (contactPhoto != null) {
-//                item.setContactPhoto(BitmapFactory.decodeStream(contactPhoto));
-            }
-            else {
-
-            }
             selectedCursor.close();
             contacts.add(item);
         }
         cursor.close();
 
         return contacts;
+    }
+
+    public void close() {
+        db.close();
     }
 
     public List<ContactModel> getAddedContacts() {
