@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import com.f.myCircle.R;
 
 import f.Ties.fragments.AddFragment;
-import f.Ties.models.DatabaseManager;
+import f.Ties.util.DatabaseManager;
 import f.Ties.models.ContactModel;
 
 public class AddActivity extends Activity {

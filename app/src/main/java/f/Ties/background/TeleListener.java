@@ -10,7 +10,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import f.Ties.models.ContactModel;
-import f.Ties.models.DatabaseManager;
+import f.Ties.util.DatabaseManager;
 
 /**
  * Created by jeff on 7/18/14.

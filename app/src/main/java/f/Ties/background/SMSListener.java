@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 import f.Ties.models.ContactModel;
-import f.Ties.models.DatabaseManager;
+import f.Ties.util.DatabaseManager;
 
 /**
  * Created by jeff on 7/19/14.

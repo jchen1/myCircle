@@ -171,10 +171,9 @@ public abstract class ImageWorker {
      * caching.
      * @param activity
      * @param diskCacheDirectoryName See
-     * {@link ImageCache.ImageCacheParams#ImageCacheParams(android.content.Context, String)}.
      */
     public void addImageCache(Activity activity, String diskCacheDirectoryName) {
-        mImageCacheParams = new ImageCache.ImageCacheParams(activity, diskCacheDirectoryName);
+        mImageCacheParams = new ImageCache.ImageCacheParams();
         mImageCache = ImageCache.getInstance(activity.getFragmentManager(), mImageCacheParams);
         new CacheAsyncTask().execute(MESSAGE_INIT_DISK_CACHE);
     }
@@ -289,15 +288,6 @@ public abstract class ImageWorker {
                         mPauseWorkLock.wait();
                     } catch (InterruptedException e) {}
                 }
-            }
-
-            // If the image cache is available and this task has not been cancelled by another
-            // thread and the ImageView that was originally bound to this task is still bound back
-            // to this task and our "exit early" flag is not set then try and fetch the bitmap from
-            // the cache
-            if (mImageCache != null && !isCancelled() && getAttachedImageView() != null
-                    && !mExitTasksEarly) {
-                bitmap = mImageCache.getBitmapFromDiskCache(dataString);
             }
 
             // If the bitmap was not found in the cache and this task has not been cancelled by
@@ -443,23 +433,8 @@ public abstract class ImageWorker {
                 case MESSAGE_CLEAR:
                     clearCacheInternal();
                     break;
-                case MESSAGE_INIT_DISK_CACHE:
-                    initDiskCacheInternal();
-                    break;
-                case MESSAGE_FLUSH:
-                    flushCacheInternal();
-                    break;
-                case MESSAGE_CLOSE:
-                    closeCacheInternal();
-                    break;
             }
             return null;
-        }
-    }
-
-    protected void initDiskCacheInternal() {
-        if (mImageCache != null) {
-            mImageCache.initDiskCache();
         }
     }
 
@@ -469,27 +444,9 @@ public abstract class ImageWorker {
         }
     }
 
-    protected void flushCacheInternal() {
-        if (mImageCache != null) {
-            mImageCache.flush();
-        }
-    }
-
-    protected void closeCacheInternal() {
-        if (mImageCache != null) {
-            mImageCache.close();
-            mImageCache = null;
-        }
-    }
-
 
     private int getRandomColor(String name) {
         return colors[(int)((name.hashCode() & 0xffffffffl) % colors.length)];
-    }
-
-
-    public void clearCache() {
-        new CacheAsyncTask().execute(MESSAGE_CLEAR);
     }
 
     public void flushCache() {

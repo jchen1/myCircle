@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.f.myCircle.R;
 
-import f.Ties.models.DatabaseManager;
+import f.Ties.util.DatabaseManager;
 import f.Ties.background.UkService;
 import f.Ties.fragments.EmptyHomeFragment;
 import f.Ties.fragments.HomeFragment;

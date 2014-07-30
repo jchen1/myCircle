@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import f.Ties.models.DatabaseManager;
+import f.Ties.util.DatabaseManager;
 import f.Ties.models.ContactModel;
 import f.Ties.models.ContactModelTimeComparator;
 import f.Ties.util.ImageCache;
@@ -33,7 +33,6 @@ public class HomeFragment extends ListFragment {
     Activity mActivity;
 
     private ContactArrayAdapter mAdapter;
-    private static final String IMAGE_CACHE_DIR = "thumbs";
 
     private int mImageThumbSize;
     private ImageResizer mImageResizer;
@@ -51,7 +50,7 @@ public class HomeFragment extends ListFragment {
 
         mImageThumbSize = getResources().getDimensionPixelSize(R.dimen.contact_photo_size);
 
-        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
+        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams();
         cacheParams.setMemCacheSizePercent(0.25f);
 
         mImageResizer = new ImageResizer(getActivity(), mImageThumbSize);

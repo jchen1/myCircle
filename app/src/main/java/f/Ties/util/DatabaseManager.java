@@ -1,4 +1,4 @@
-package f.Ties.models;
+package f.Ties.util;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import f.Ties.models.ContactModel;
 
 
 /**

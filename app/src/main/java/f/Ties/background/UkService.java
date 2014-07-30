@@ -19,7 +19,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import f.Ties.activities.MainActivity;
-import f.Ties.models.DatabaseManager;
+import f.Ties.util.DatabaseManager;
 import f.Ties.models.ContactModel;
 
 /**

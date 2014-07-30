@@ -21,7 +21,7 @@ import java.util.List;
 
 import f.Ties.models.ContactModel;
 import f.Ties.models.ContactModelNameComparator;
-import f.Ties.models.DatabaseManager;
+import f.Ties.util.DatabaseManager;
 import f.Ties.util.ImageCache;
 import f.Ties.util.ImageResizer;
 
@@ -50,7 +50,7 @@ public class AddFragment extends ListFragment {
 
         mImageThumbSize = getResources().getDimensionPixelSize(R.dimen.contact_photo_size);
 
-        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
+        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams();
         cacheParams.setMemCacheSizePercent(0.25f);
 
         mImageResizer = new ImageResizer(getActivity(), mImageThumbSize);
