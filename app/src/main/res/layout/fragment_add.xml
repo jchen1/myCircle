@@ -4,4 +4,9 @@
     android:layout_height="match_parent"
     android:divider="@null"
     android:dividerHeight="0dp"
-    android:background="@color/add_background"/>
+    android:background="@color/add_background"
+    android:fastScrollEnabled="true"
+    android:fastScrollAlwaysVisible="true"
+    android:focusable="false"
+    android:smoothScrollbar="false"
+    android:textFilterEnabled="false" />
