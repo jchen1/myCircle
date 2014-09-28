@@ -11,5 +11,6 @@
     <string name="title_activity_add">Add contacts</string>
     <string name="hello_blank_fragment">You have not added any contacts!\n\nClick \'contacts\' to
     add contacts.</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>
