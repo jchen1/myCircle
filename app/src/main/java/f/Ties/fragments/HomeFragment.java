@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,12 +80,14 @@ public class HomeFragment extends ListFragment {
             handler.postDelayed(this, 1000);
             }
         });
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                String selected = ""+((ContactModel)lv.getItemAtPosition(position)).getContactId();
+                Log.v("name homefrag", selected);
                 Intent appInfo;
                 appInfo = new Intent(mActivity, ProfileActivity.class);
+                appInfo.putExtra("selectedContact", selected);
                 startActivity(appInfo);
             }
         });
