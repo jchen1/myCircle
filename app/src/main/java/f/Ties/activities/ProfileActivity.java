@@ -8,12 +8,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.f.myCircle.R;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import f.Ties.background.UkService;
@@ -46,6 +50,9 @@ public class ProfileActivity extends Activity {
         contacts = getModel();
         ContactModel selected;
         TextView name = (TextView)findViewById(R.id.name);
+        TextView lastContact = (TextView)findViewById(R.id.lastContact);
+        TextView timeLeft = (TextView)findViewById(R.id.timeLeft);
+        ListView history = (ListView) findViewById(R.id.history);
         Bundle bundle = getIntent().getExtras();
         int idString = Integer.parseInt(bundle.getString("selectedContact"));
         selected = contacts.get(0);
@@ -55,9 +62,12 @@ public class ProfileActivity extends Activity {
             }
         }
         mImageResizer.loadImage(selected, (ImageView) findViewById(R.id.contactPhoto));
-        View view = getWindow().getDecorView();
         if (bundle != null) {
             name.setText(selected.getName());
+            lastContact.setText("Last Contact: "+selected.getLastContacted());
+            timeLeft.setText("Time Left: "+selected.getTtk());
+            //ArrayAdapter<String> mHistory = new ArrayAdapter<String>(this, android.R.layout., array);
+            //history.setAdapter(mHistory);
             getActionBar().setTitle(selected.getName());
         }
     }
