@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.f.myCircle.R;
@@ -20,18 +21,28 @@ import f.Ties.fragments.ProfileFragment;
 import f.Ties.models.ContactModel;
 import f.Ties.models.ContactModelTimeComparator;
 import f.Ties.util.DatabaseManager;
+import f.Ties.util.ImageCache;
+import f.Ties.util.ImageResizer;
 
 public class ProfileActivity extends Activity {
     private ProfileFragment profileFragment;
     DatabaseManager db;
     Activity mActivity;
+    private int mImageThumbSize;
+    private ImageResizer mImageResizer;
     List<ContactModel> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        mImageThumbSize = getResources().getDimensionPixelSize(R.dimen.contact_photo_size);
         db = new DatabaseManager(this);
+        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams();
+        cacheParams.setMemCacheSizePercent(0.25f);
+        mImageResizer = new ImageResizer(this, mImageThumbSize);
+        mImageResizer.setLoadingImage(R.drawable.logo);
+        mImageResizer.addImageCache(getFragmentManager(), cacheParams);
         contacts = getModel();
         ContactModel selected;
         TextView name = (TextView)findViewById(R.id.name);
@@ -43,9 +54,11 @@ public class ProfileActivity extends Activity {
                 selected = contact;
             }
         }
+        mImageResizer.loadImage(selected, (ImageView) findViewById(R.id.contactPhoto));
         View view = getWindow().getDecorView();
         if (bundle != null) {
             name.setText(selected.getName());
+            getActionBar().setTitle(selected.getName());
         }
     }
     private List<ContactModel> getModel() {
