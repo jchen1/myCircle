@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="f.Ties.activities.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +40,8 @@
 
         <activity
             android:name="f.Ties.activities.AddActivity"
-            android:label="@string/title_activity_add" >
+            android:label="@string/title_activity_add"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="f.Ties.activities.ProfileActivity"

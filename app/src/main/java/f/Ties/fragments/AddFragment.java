@@ -32,7 +32,6 @@ public class AddFragment extends ListFragment {
     private DatabaseManager db;
     private Activity mActivity;
     private ContactArrayAdapter mAdapter;
-    private static final String IMAGE_CACHE_DIR = "thumbs";
 
     private int mImageThumbSize;
     private ImageResizer mImageResizer;
@@ -111,13 +110,11 @@ public class AddFragment extends ListFragment {
 
     private class ContactArrayAdapter extends ArrayAdapter<ContactModel> {
 
-        private final List<ContactModel> list;
         private final Activity context;
 
         public ContactArrayAdapter(Activity context, List<ContactModel> list) {
             super(context, R.layout.fragment_add_item, list);
             this.context = context;
-            this.list = list;
         }
 
         @Override
