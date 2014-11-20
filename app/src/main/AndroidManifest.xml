@@ -41,6 +41,10 @@
             android:name="f.Ties.activities.AddActivity"
             android:label="@string/title_activity_add" >
         </activity>
+        <activity
+            android:name="f.Ties.activities.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
     </application>
 
 </manifest>

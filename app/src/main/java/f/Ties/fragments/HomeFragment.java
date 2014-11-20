@@ -2,12 +2,15 @@ package f.Ties.fragments;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import f.Ties.activities.ProfileActivity;
 import f.Ties.util.DatabaseManager;
 import f.Ties.models.ContactModel;
 import f.Ties.models.ContactModelTimeComparator;
@@ -76,6 +80,17 @@ public class HomeFragment extends ListFragment {
             handler.postDelayed(this, 1000);
             }
         });
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                String selected = ""+((ContactModel)lv.getItemAtPosition(position)).getContactId();
+                Log.v("name homefrag", selected);
+                Intent appInfo;
+                appInfo = new Intent(mActivity, ProfileActivity.class);
+                appInfo.putExtra("selectedContact", selected);
+                startActivity(appInfo);
+            }
+        });
     }
 
     @Override
@@ -96,6 +111,7 @@ public class HomeFragment extends ListFragment {
     private List<ContactModel> getModel() {
         List<ContactModel> addedContacts = db.getAddedContacts();
         Collections.sort(addedContacts, new ContactModelTimeComparator());
+
 
         return addedContacts;
     }
