@@ -41,7 +41,8 @@
         <activity
             android:name="f.Ties.activities.AddActivity"
             android:label="@string/title_activity_add"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name="f.Ties.activities.ProfileActivity"

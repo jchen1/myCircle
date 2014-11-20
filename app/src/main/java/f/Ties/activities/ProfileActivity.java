@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import f.Ties.util.DatabaseManager;
 import f.Ties.util.ImageCache;
 import f.Ties.util.ImageResizer;
 
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends ActionBarActivity {
     private ProfileFragment profileFragment;
     DatabaseManager db;
     Activity mActivity;

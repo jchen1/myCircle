@@ -2,6 +2,8 @@ package f.Ties.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -12,20 +14,27 @@ import f.Ties.fragments.AddFragment;
 import f.Ties.util.DatabaseManager;
 import f.Ties.models.ContactModel;
 
-public class AddActivity extends Activity {
+public class AddActivity extends ActionBarActivity {
 
     private AddFragment addFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        addFragment = new AddFragment();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, addFragment)
-                    .commit();
-        }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
+        setSupportActionBar(toolbar);
+
+        addFragment = new AddFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, addFragment)
+                .commit();
     }
 
     @Override

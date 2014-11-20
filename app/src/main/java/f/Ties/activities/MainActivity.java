@@ -5,6 +5,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,7 +17,7 @@ import f.Ties.background.UkService;
 import f.Ties.fragments.EmptyHomeFragment;
 import f.Ties.fragments.HomeFragment;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
     private EmptyHomeFragment emptyHomeFragment;
     private HomeFragment homeFragment;
 
@@ -23,6 +25,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         if (isMyServiceRunning(UkService.class) == false) {
             Context context = getApplicationContext();
@@ -37,12 +42,14 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        getFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+/*
         if (new DatabaseManager(getApplicationContext()).getAddedContacts().size() == 0) {
             getFragmentManager().beginTransaction().replace(R.id.container, emptyHomeFragment).commit();
         }
         else {
             getFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-        }
+        }*/
     }
 
     @Override
